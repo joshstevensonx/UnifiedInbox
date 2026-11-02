@@ -85,7 +85,7 @@ final class AppModel: ObservableObject {
     @Published var quickLookHotKey: Bool {
         didSet {
             UserDefaults.standard.set(quickLookHotKey, forKey: Keys.quickLookHotKey)
-            quickLook?.setHotKeyEnabled(quickLookHotKey)
+            hotkeys.setGroupEnabled("quickLook", quickLookHotKey)
         }
     }
 
@@ -93,7 +93,7 @@ final class AppModel: ObservableObject {
     @Published var launcherHotKey: Bool {
         didSet {
             UserDefaults.standard.set(launcherHotKey, forKey: Keys.launcherHotKey)
-            launcherPanel.setHotKeyEnabled(launcherHotKey)
+            hotkeys.setGroupEnabled("launcher", launcherHotKey)
         }
     }
 
@@ -101,7 +101,7 @@ final class AppModel: ObservableObject {
     @Published var tilingHotKeys: Bool {
         didSet {
             UserDefaults.standard.set(tilingHotKeys, forKey: Keys.tilingHotKeys)
-            windows.setHotKeysEnabled(tilingHotKeys)
+            hotkeys.setGroupEnabled("tiling", tilingHotKeys)
         lockObserver = NotificationCenter.default.addObserver(forName: .appDidLock, object: nil, queue: .main) { [weak self] _ in
             Task { @MainActor in
                 self?.quickLook?.close()
@@ -135,6 +135,7 @@ final class AppModel: ObservableObject {
     let files: FileToolsModel
     let habits: HabitsModel
     let lock: AppLock
+    let hotkeys: HotkeyManager
     private var lockObserver: NSObjectProtocol?
     private var quickLook: QuickLookController?
 
@@ -187,6 +188,7 @@ final class AppModel: ObservableObject {
         files = FileToolsModel()
         habits = HabitsModel()
         lock = AppLock.shared
+        hotkeys = HotkeyManager()
         tilingHotKeys = d.object(forKey: Keys.tilingHotKeys) as? Bool ?? true
         launcherHotKey = d.object(forKey: Keys.launcherHotKey) as? Bool ?? true
         section = d.string(forKey: Keys.lastSection).flatMap(AppSection.init(rawValue:)) ?? .overview
@@ -220,12 +222,10 @@ final class AppModel: ObservableObject {
         }
         keyboard = KeyboardTriage(model: self)
         quickLook = QuickLookController(model: self)
-        quickLook?.setHotKeyEnabled(quickLookHotKey)
         PriorityNotifier.requestAuthorizationIfPossible()
         launcherPanel.model = self
-        launcherPanel.setHotKeyEnabled(launcherHotKey)
         widgets.attach(model: self)
-        windows.setHotKeysEnabled(tilingHotKeys)
+        registerHotkeys()
     }
 
     // MARK: Capture

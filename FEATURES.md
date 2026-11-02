@@ -74,7 +74,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 | 16 | File tools: large-file finder (size threshold, skips Library/.git/node_modules), Downloads cleanup by category with age-based suggestions, byte-exact duplicate finder (keep oldest/newest), Move to Trash with confirmation | ✅ |
 | 17 | Habits (daily / weekdays / N× per week, 7-day grid, streaks, 30-day rate, daily reminder) + weekly review (tasks, focus chart, habits, screen time, messages, reflection, save as note) | ✅ |
 | 18 | App lock (Touch ID or Mac password; after N min away, on sleep, on screen lock; covers window, menu bar, quick look, clipboard, launcher) + encrypted backup (AES-256-GCM, PBKDF2-SHA256 210k) and staged restore with automatic restart | ✅ |
-| 19 | Hotkey manager with rebinding | ⬜ |
+| 19 | Hotkey manager: one registry for all global shortcuts, record / clear / reset per action, conflict and "owned by another app" warnings, extra assignable actions (today's note, focus, screenshot, OCR, lock, play/pause, every tile layout) | ✅ |
 | 20 | Automation rules (triggers → actions, cooldown, run log) | ⬜ |
 | 21 | Text snippet expansion (Accessibility) | ⬜ |
 | 22 | Process manager (all processes) + log viewer | ⬜ |
@@ -89,7 +89,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 - ✅ File tools: large-file finder, Downloads cleanup, duplicates §3.3
 - ✅ Threshold alerts: CPU, memory pressure, low battery, low disk §4.4 (batch 5)
 - ✅ Habit tracker + weekly review §11.3–11.4
-- ⬜ Hotkey manager with rebinding §8.1
+- ✅ Hotkey manager with rebinding §8.1
 - ✅ App lock with Touch ID §13.1
 - ⬜ Not planned: private-API features (MediaRemote, fan/temperature via SMC, /etc/hosts blocking)
 
@@ -99,7 +99,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 - ⬜ Ambient clocks and scenes
 - ✅ Threshold alerts: CPU, memory pressure, low battery, low disk (opt-in, debounced)
 - ⬜ Automation rules
-- ⬜ Launcher edge / hot-corner reveal; configurable hotkeys
+- ⬜ Launcher edge / hot-corner reveal (task 24); ✅ configurable hotkeys
 - ✅ Battery and storage history charts (24 h)
 
 ## Up next (batch 4)

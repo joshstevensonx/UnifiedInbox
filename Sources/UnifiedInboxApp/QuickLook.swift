@@ -51,22 +51,11 @@ final class GlobalHotKey {
 final class QuickLookController {
     private weak var model: AppModel?
     private var panel: NSPanel?
-    private var hotKey: GlobalHotKey?
     private var resignObserver: NSObjectProtocol?
 
+    /// The ⌃⌥Space shortcut is registered by `HotkeyManager` (id "quickLook").
     init(model: AppModel) {
         self.model = model
-    }
-
-    func setHotKeyEnabled(_ enabled: Bool) {
-        if enabled, hotKey == nil {
-            hotKey = GlobalHotKey { [weak self] in
-                Task { @MainActor in self?.toggle() }
-            }
-            if hotKey == nil { NSLog("QuickLook: ⌃⌥Space is already used by another app") }
-        } else if !enabled {
-            hotKey = nil
-        }
     }
 
     func toggle() {

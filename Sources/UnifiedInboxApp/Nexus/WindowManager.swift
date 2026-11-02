@@ -74,9 +74,8 @@ final class WindowManager: ObservableObject {
     private var lastExternalPID: pid_t?
     private var lastLayout: (pid: pid_t, layout: TileLayout, at: Date)?
     private var observers: [NSObjectProtocol] = []
-    private var hotKeys: [GlobalHotKey] = []
 
-    /// Default tiling shortcuts (⌃⌥ + key). Task 19's hotkey manager can rebind them.
+    /// Default tiling shortcuts (⌃⌥ + key), registered and rebindable in `HotkeyManager`.
     static let defaultBindings: [(TileLayout, UInt32, String)] = [
         (.leftHalf, UInt32(kVK_LeftArrow), "⌃⌥←"),
         (.rightHalf, UInt32(kVK_RightArrow), "⌃⌥→"),
@@ -120,20 +119,6 @@ final class WindowManager: ObservableObject {
         lastMessage = text
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
             if self?.lastMessage == text { self?.lastMessage = nil }
-        }
-    }
-
-    // MARK: Hotkeys
-
-    func setHotKeysEnabled(_ on: Bool) {
-        hotKeys = []
-        guard on else { return }
-        for (layout, key, _) in Self.defaultBindings {
-            if let hk = GlobalHotKey(keyCode: key, modifiers: UInt32(controlKey | optionKey), action: { [weak self] in
-                Task { @MainActor in self?.tile(layout) }
-            }) {
-                hotKeys.append(hk)
-            }
         }
     }
 
@@ -314,6 +299,7 @@ struct WindowsView: View {
 
 struct TilingPanel: View {
     @EnvironmentObject private var windows: WindowManager
+    @EnvironmentObject private var hotkeys: HotkeyManager
     private let columns = [GridItem(.adaptive(minimum: 120), spacing: 12)]
 
     var body: some View {
@@ -326,8 +312,8 @@ struct TilingPanel: View {
                         VStack(spacing: 8) {
                             TilePreview(layout: layout).frame(width: 72, height: 46)
                             Text(layout.title).font(.system(size: 11)).foregroundStyle(Theme.primary)
-                            if let key = WindowManager.defaultBindings.first(where: { $0.0 == layout })?.2 {
-                                Text(key).font(.system(size: 10, design: .monospaced)).foregroundStyle(Theme.tertiary)
+                            if !hotkeys.display("tile.\(layout.rawValue)").isEmpty {
+                                Text(hotkeys.display("tile.\(layout.rawValue)")).font(.system(size: 10, design: .monospaced)).foregroundStyle(Theme.tertiary)
                             }
                         }
                         .frame(maxWidth: .infinity).padding(.vertical, 12)

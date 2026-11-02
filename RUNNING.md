@@ -238,6 +238,11 @@ Mac sleeps or when the screen locks. Capture keeps running while locked.
 **Restore…** asks for the password, then restarts the app to swap the data in; your previous data is kept in
 `~/Library/Application Support/UnifiedInbox.before-restore/`. There is no way to recover a forgotten password.
 
+### Shortcuts
+**Settings → Shortcuts** lists every global shortcut. Click one and press the new keys (⌃, ⌥ or ⌘ plus a key);
+⎋ cancels and ⌫ removes it. ⚠︎ means another app owns the combination. Extra actions (today's note, focus timer,
+screenshot, OCR, lock, play/pause, all window layouts) have no shortcut until you record one.
+
 ## 9. Troubleshooting
 
 | Symptom | Fix |

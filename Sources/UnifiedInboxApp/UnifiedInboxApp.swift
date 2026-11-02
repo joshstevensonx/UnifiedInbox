@@ -24,6 +24,7 @@ struct UnifiedInboxApp: App {
                 .environmentObject(model.notes)
                 .environmentObject(model.files)
                 .environmentObject(model.habits)
+                .environmentObject(model.hotkeys)
                 .lockable()
                 .environmentObject(model.lock)
                 .frame(minWidth: 820, minHeight: 500)
@@ -100,6 +101,7 @@ struct UnifiedInboxApp: App {
                 .environmentObject(model.clipboard)
                 .environmentObject(model.lock)
                 .environmentObject(model.windows)
+                .environmentObject(model.hotkeys)
         }
     }
 }

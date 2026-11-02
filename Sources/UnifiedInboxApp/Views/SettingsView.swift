@@ -42,7 +42,7 @@ struct SettingsView: View {
             Divider()
             Toggle("Group messages by conversation", isOn: $model.groupThreads)
                 .help("One row per chat/thread instead of one per message (⇧⌘G)")
-            Toggle("Quick look hotkey: ⌃⌥Space", isOn: $model.quickLookHotKey)
+            Toggle("Quick look hotkey (Settings → Shortcuts)", isOn: $model.quickLookHotKey)
                 .help("Opens a search panel over any app")
             Toggle("Privacy mode", isOn: $model.privacyMode)
             Text("Hides message text in the menu bar, quick look list and priority banners (e.g. when screen sharing).")
@@ -120,6 +120,7 @@ struct SettingsView: View {
 
     private var shortcuts: some View {
         Form {
+            HotkeySettings()
             Section("Inbox window (single keys)") {
                 ForEach(KeyboardTriage.help, id: \.key) { row in
                     LabeledContent(row.action) { Text(row.key).font(.system(.body, design: .monospaced)) }
@@ -130,7 +131,6 @@ struct SettingsView: View {
                 LabeledContent("Mark all as read") { Text("⇧⌘K").font(.system(.body, design: .monospaced)) }
                 LabeledContent("Search") { Text("⌘F").font(.system(.body, design: .monospaced)) }
                 LabeledContent("Group by conversation") { Text("⇧⌘G").font(.system(.body, design: .monospaced)) }
-                LabeledContent("Quick look (from any app)") { Text("⌃⌥Space").font(.system(.body, design: .monospaced)) }
             }
         }
         .formStyle(.grouped)
@@ -190,7 +190,7 @@ struct NexusSettings: View {
     var body: some View {
         Form {
             Section("Launcher") {
-                Toggle("Launcher hotkey: ⌥Space", isOn: $model.launcherHotKey)
+                Toggle("Launcher hotkey (Settings → Shortcuts)", isOn: $model.launcherHotKey)
                     .help("Opens the launcher panel over any app")
                 Picker("Sort items", selection: Binding(get: { launcher.sort }, set: { launcher.sort = $0 })) {
                     ForEach(LauncherSort.allCases) { Text($0.title).tag($0) }
@@ -208,7 +208,7 @@ struct NexusSettings: View {
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section("Windows") {
-                Toggle("Tiling shortcuts: ⌃⌥ arrows, ⌃⌥↩ maximize, ⌃⌥C center", isOn: $model.tilingHotKeys)
+                Toggle("Window tiling shortcuts (default ⌃⌥ arrows, ⌃⌥↩, ⌃⌥C)", isOn: $model.tilingHotKeys)
                 Text("Needs Accessibility permission (Settings → Privacy). Another app may already own these keys.")
                     .font(.caption).foregroundStyle(.secondary)
             }

@@ -63,7 +63,7 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 | 16 | File tools: large files, Downloads cleanup, duplicates | ✅ `NexusCore/Files/FileTools.swift` (+`FileToolsTests`), `Nexus/FileToolsModel.swift`, Files page; folder usage strings in Info.plist |
 | 17 | Habits + weekly review | ✅ `NexusCore/Productivity/Habits.swift` (+`HabitsTests`), `Nexus/HabitsModel.swift`, Habits page |
 | 18 | Touch ID app lock + AES-GCM encrypted backup/restore | ✅ `NexusCore/Security/Backup.swift` (+`BackupTests`; encryption test runs on Mac only), `InboxStore.backup(toPath:)` (+`BackupStoreTests`), `Nexus/Security.swift`, Settings → Security |
-| 19 | Hotkey manager with rebinding (central registry over `GlobalHotKey`) | ⬜ |
+| 19 | Hotkey manager with rebinding (central registry over `GlobalHotKey`) | ✅ `NexusCore/Hotkeys/Hotkeys.swift` (+`HotkeyTests`), `Nexus/HotkeyManager.swift`, Settings → Shortcuts |
 | 20 | Automation rules (triggers → actions, cooldown, run log) | ⬜ |
 | 21 | Text snippet expansion (event tap, Accessibility) | ⬜ |
 | 22 | Process manager (libproc, all processes) + log viewer | ⬜ |
@@ -73,12 +73,12 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 
 ### Notes for later tasks
 - When adding Automation (task 20), call `automation?.newMessages(items)` at the top of `AppModel.handleNew` (removed at handoff because the type doesn't exist yet).
-- New global hotkeys must use `GlobalHotKey` (QuickLook.swift). It supports several at once via a shared handler keyed by id. Existing: ⌃⌥Space quick look, ⌥Space palette, ⌃⌥V clipboard.
+- New global hotkeys: add a `HotkeyManager.Action` in `AppModel.registerHotkeys()` (HotkeyManager.swift). Don't create `GlobalHotKey` directly any more. Defaults: ⌃⌥Space quick look, ⌥Space palette, ⌃⌥V clipboard, ⌃⌥ arrows/↩/C tiling; other actions are unassigned until the user records one.
+- The per-feature toggles (quick look, launcher, tiling) switch whole hotkey groups on/off via `hotkeys.setGroupEnabled`.
 - Sidebar pages are `AppSection` cases (AppModel.swift). Add a case, title, symbol, `SidebarView` row, `ContentView.page` switch case, `pageHelp`, and environment objects in `UnifiedInboxApp.swift`.
 - Persist feature state with `JSONFileStore<T>` (NexusCore/Launcher/Launcher.swift) under Application Support.
 - Accessibility-based features must check trust via `AX.isTrusted()` (WindowManager.swift) and guide the user. The `PermissionsView` Accessibility row lists what uses it; add snippets (task 21) there.
 - `AppSection` now has more than 9 cases; the Go menu only assigns ⌘1–⌘9 to the first nine.
-- Tiling hotkeys are registered in `WindowManager.setHotKeysEnabled` via `GlobalHotKey`; move them into the hotkey registry in task 19.
 - App lock: `AppLock.shared` (MainActor). Gate new panels with `AppLock.shared.whenUnlocked { … }` and close them on `.appDidLock`. Floating widgets (incl. the Inbox widget) are not hidden while locked yet.
 - Restore is staged in `UnifiedInbox.restore/` and swapped in at the top of `AppModel.init` (`BackupService.applyPendingRestore`); the previous data goes to `UnifiedInbox.before-restore/`.
 - Reusable `TextPrompt.ask(title:message:)` (WindowManager.swift) for one-field NSAlert prompts.
