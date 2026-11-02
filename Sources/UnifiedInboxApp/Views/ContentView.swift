@@ -34,6 +34,7 @@ struct ContentView: View {
         case .clipboard: ClipboardView()
         case .focus: FocusView()
         case .windows: WindowsView()
+        case .notes: NotesView()
         case .inbox: EmptyView()
         }
     }

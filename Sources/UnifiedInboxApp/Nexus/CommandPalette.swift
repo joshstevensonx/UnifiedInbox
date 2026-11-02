@@ -110,6 +110,7 @@ extension AppModel {
         })
 
         c += windowPaletteCommands()
+        c += notesPaletteCommands()
 
         // System
         c.append(PaletteCommand(id: "system.pauseMonitoring", title: monitor.isPaused ? "Resume Monitoring" : "Pause Monitoring",

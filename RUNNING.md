@@ -211,6 +211,13 @@ permission; remove and re-add the app if tiling stops working.
 - **Workspaces**: "Save Current…" stores open apps and their window positions. "Switch" reopens missing apps in
   the background and puts windows back (optionally hiding other apps). Also in ⌥Space: type `workspace`.
 
+### Notes
+**Notes** page (Tools). Each note is a plain Markdown file in `~/Library/Application Support/UnifiedInbox/Notes/`
+("Show Folder"), so any editor works too. Type `[[Another note]]` to link; click the link in Preview to open it
+(or create it). The bottom of a note lists notes that link to it and notes that mention it without a link.
+Renaming a note (edit the title, press ↩) updates links everywhere. The calendar button opens today's daily note.
+Search with `#tag` to filter by tag. Right-click a message → "Add to Today's Note".
+
 ## 9. Troubleshooting
 
 | Symptom | Fix |

@@ -59,7 +59,7 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 | 12 | Saved searches, private notes, "Remind me", Add to Tasks / Apple Reminders, export by date range | ✅ |
 | 13 | Threshold alerts + battery/storage history | ✅ tests (`ThresholdTests`), wired in `SystemMonitor`, charts in Monitor Battery/Storage tabs, Settings → Nexus → System alerts |
 | 14 | Window tiling + workspaces (Accessibility) | ✅ `NexusCore/Windows/Tiling.swift` (+`TilingTests`), `Nexus/WindowManager.swift`, Windows page, palette commands |
-| 15 | Notes: Markdown, [[backlinks]], daily notes | ⬜ |
+| 15 | Notes: Markdown, [[backlinks]], daily notes | ✅ `NexusCore/Productivity/Notes.swift` (+`NotesTests`), `Nexus/NotesModel.swift`, Notes page |
 | 16 | File tools: large files, Downloads cleanup, duplicates | ⬜ |
 | 17 | Habits + weekly review | ⬜ |
 | 18 | Touch ID app lock + AES-GCM encrypted backup/restore | ⬜ |
