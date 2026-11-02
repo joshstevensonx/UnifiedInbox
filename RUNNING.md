@@ -251,6 +251,13 @@ timer, running a Shortcut, sounds, copying text, adding a task or a line to toda
 Use `{sender}`, `{text}`, `{app}`, `{time}` etc. in text. "Run Now" tests a rule; the **Run Log** shows what ran.
 "Add Examples" adds a few turned-off rules to start from.
 
+### Snippets
+**Snippets** page (Tools). Turn on "Expand snippets", allow **Accessibility** when asked, then type an
+abbreviation such as `;date` in any app. It's replaced by the expansion (pasted; your clipboard is put back
+half a second later). Placeholders: `{date}` `{time}` `{datetime}` `{isodate}` `{weekday}` `{clipboard}`, and
+`{cursor}` for where the caret should end up. Nothing expands in password fields. Add bundle ids (e.g.
+`com.apple.Terminal`) under "Don't expand in" to switch it off for some apps.
+
 ## 9. Troubleshooting
 
 | Symptom | Fix |

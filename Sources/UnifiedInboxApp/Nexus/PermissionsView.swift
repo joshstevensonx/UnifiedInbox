@@ -48,7 +48,7 @@ struct PermissionsView: View {
                     state: screenRecording, anchor: "Privacy_ScreenCapture")
                 row("Automation: Music", why: "Now Playing and play/pause/skip for Music.", state: musicAutomation, anchor: "Privacy_Automation")
                 row("Automation: Spotify", why: "Now Playing and play/pause/skip for Spotify.", state: spotifyAutomation, anchor: "Privacy_Automation")
-                row("Accessibility", why: "Window tiling and restoring workspace window positions. Asked the first time you tile a window.",
+                row("Accessibility", why: "Window tiling, restoring workspace window positions, and text snippets (seeing what you type in other apps to expand abbreviations; never in password fields).",
                     state: accessibility, anchor: "Privacy_Accessibility")
             } header: {
                 HStack {

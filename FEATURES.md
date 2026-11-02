@@ -76,7 +76,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 | 18 | App lock (Touch ID or Mac password; after N min away, on sleep, on screen lock; covers window, menu bar, quick look, clipboard, launcher) + encrypted backup (AES-256-GCM, PBKDF2-SHA256 210k) and staged restore with automatic restart | ✅ |
 | 19 | Hotkey manager: one registry for all global shortcuts, record / clear / reset per action, conflict and "owned by another app" warnings, extra assignable actions (today's note, focus, screenshot, OCR, lock, play/pause, every tile layout) | ✅ |
 | 20 | Automation: triggers (new message with filters, app opens / quits, time of day + weekdays, battery low, CPU high, focus start / end) → actions (notify, open / quit / hide app, URL, workspace, focus, Shortcuts, sound, copy, task, daily note, privacy mode, palette command) with {placeholders}, cooldown, loop guard, Run Now, run log | ✅ |
-| 21 | Text snippet expansion (Accessibility) | ⬜ |
+| 21 | Text snippets: abbreviation → expansion in any app (global key monitor + paste, clipboard restored, transient so clipboard history skips it), {date} {time} {clipboard} {cursor}…, word-boundary matching, overlap warnings, excluded apps, never in password fields | ✅ |
 | 22 | Process manager (all processes) + log viewer | ⬜ |
 | 23 | `inboxctl` CLI + stdio MCP server over the local DB | ⬜ |
 | 24 | Ambient clock, density / accent settings, hot-corner launcher, daily digest | ⬜ |
@@ -84,7 +84,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 ## From the feature spec: good next candidates
 - ✅ Window snapping / tiling layouts (needs Accessibility permission) §6.2
 - ✅ Workspaces: save/restore running apps + window positions §2.2
-- ⬜ Text expansion / snippets (needs Accessibility) §1.4
+- ✅ Text expansion / snippets (needs Accessibility) §1.4
 - ✅ Notes with Markdown, backlinks, daily notes §10
 - ✅ File tools: large-file finder, Downloads cleanup, duplicates §3.3
 - ✅ Threshold alerts: CPU, memory pressure, low battery, low disk §4.4 (batch 5)

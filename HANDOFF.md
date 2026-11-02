@@ -65,7 +65,7 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 | 18 | Touch ID app lock + AES-GCM encrypted backup/restore | ✅ `NexusCore/Security/Backup.swift` (+`BackupTests`; encryption test runs on Mac only), `InboxStore.backup(toPath:)` (+`BackupStoreTests`), `Nexus/Security.swift`, Settings → Security |
 | 19 | Hotkey manager with rebinding (central registry over `GlobalHotKey`) | ✅ `NexusCore/Hotkeys/Hotkeys.swift` (+`HotkeyTests`), `Nexus/HotkeyManager.swift`, Settings → Shortcuts |
 | 20 | Automation rules (triggers → actions, cooldown, run log) | ✅ `NexusCore/Automation/Automation.swift` (+`AutomationTests`), `Nexus/AutomationManager.swift`, Automation page; `AppModel.handleNew` calls `automation.newMessages` |
-| 21 | Text snippet expansion (event tap, Accessibility) | ⬜ |
+| 21 | Text snippet expansion (event tap, Accessibility) | ✅ `NexusCore/Productivity/Snippets.swift` (+`SnippetTests`), `Nexus/SnippetEngine.swift` (NSEvent global monitor, not a CGEventTap), Snippets page |
 | 22 | Process manager (libproc, all processes) + log viewer | ⬜ |
 | 23 | `inboxctl` CLI + stdio MCP server over the local DB | ⬜ |
 | 24 | Ambient clock, density/accent settings, hot-corner launcher, daily digest (FoundationModels if available) | ⬜ |
@@ -77,7 +77,7 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 - The per-feature toggles (quick look, launcher, tiling) switch whole hotkey groups on/off via `hotkeys.setGroupEnabled`.
 - Sidebar pages are `AppSection` cases (AppModel.swift). Add a case, title, symbol, `SidebarView` row, `ContentView.page` switch case, `pageHelp`, and environment objects in `UnifiedInboxApp.swift`.
 - Persist feature state with `JSONFileStore<T>` (NexusCore/Launcher/Launcher.swift) under Application Support.
-- Accessibility-based features must check trust via `AX.isTrusted()` (WindowManager.swift) and guide the user. The `PermissionsView` Accessibility row lists what uses it; add snippets (task 21) there.
+- Accessibility-based features must check trust via `AX.isTrusted()` (WindowManager.swift) and guide the user. The `PermissionsView` Accessibility row lists what uses it (tiling, workspaces, snippets).
 - `AppSection` now has more than 9 cases; the Go menu only assigns ⌘1–⌘9 to the first nine.
 - App lock: `AppLock.shared` (MainActor). Gate new panels with `AppLock.shared.whenUnlocked { … }` and close them on `.appDidLock`. Floating widgets (incl. the Inbox widget) are not hidden while locked yet.
 - Restore is staged in `UnifiedInbox.restore/` and swapped in at the top of `AppModel.init` (`BackupService.applyPendingRestore`); the previous data goes to `UnifiedInbox.before-restore/`.
