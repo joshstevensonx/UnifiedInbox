@@ -17,6 +17,9 @@
     <key>CFBundleIconName</key><string>AppIcon</string>
     <key>NSRemindersUsageDescription</key><string>Unified Inbox adds messages you choose to your Reminders list.</string>
     <key>NSRemindersFullAccessUsageDescription</key><string>Unified Inbox adds messages you choose to your Reminders list.</string>
+    <key>NSDesktopFolderUsageDescription</key><string>File tools look for large and duplicate files in folders you choose to scan.</string>
+    <key>NSDocumentsFolderUsageDescription</key><string>File tools look for large and duplicate files in folders you choose to scan.</string>
+    <key>NSDownloadsFolderUsageDescription</key><string>Downloads cleanup lists old installers, archives and files so you can move them to the Trash.</string>
     <key>NSAppleEventsUsageDescription</key><string>Unified Inbox controls Music and Spotify playback (play, pause, skip) and reads what's playing. Nothing leaves your Mac.</string>
 </dict>
 </plist>

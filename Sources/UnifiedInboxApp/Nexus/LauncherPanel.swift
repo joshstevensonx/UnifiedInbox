@@ -17,7 +17,6 @@ final class LauncherPanelController: ObservableObject {
         return model.paletteResults(for: launcher.query)
     }
     private var panel: NSPanel?
-    private var hotKey: GlobalHotKey?
     private var keyMonitor: Any?
     private var resignObserver: NSObjectProtocol?
 
@@ -25,19 +24,10 @@ final class LauncherPanelController: ObservableObject {
         self.launcher = launcher
     }
 
-    func setHotKeyEnabled(_ enabled: Bool) {
-        if enabled, hotKey == nil {
-            hotKey = GlobalHotKey(keyCode: UInt32(kVK_Space), modifiers: UInt32(optionKey)) { [weak self] in
-                Task { @MainActor in self?.toggle() }
-            }
-            if hotKey == nil { NSLog("Launcher: ⌥Space is already used by another app") }
-        } else if !enabled {
-            hotKey = nil
-        }
-    }
+    // The ⌥Space shortcut is registered by `HotkeyManager` (id "launcher").
 
     func toggle() {
-        if let panel, panel.isVisible { close() } else { show() }
+        if let panel, panel.isVisible { close() } else { AppLock.shared.whenUnlocked { [weak self] in self?.show() } }
     }
 
     func close() {

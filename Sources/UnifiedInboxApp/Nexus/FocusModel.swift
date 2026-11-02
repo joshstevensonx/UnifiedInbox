@@ -197,6 +197,15 @@ enum UNUserNotificationCenterSafe {
             identifier: id, content: c, trigger: UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)))
     }
 
+    /// Repeats every day at hour:minute.
+    static func scheduleDaily(id: String, title: String, body: String, hour: Int, minute: Int) {
+        guard available else { return }
+        let c = UNMutableNotificationContent()
+        c.title = title; c.body = body; c.sound = .default
+        let trigger = UNCalendarNotificationTrigger(dateMatching: DateComponents(hour: hour, minute: minute), repeats: true)
+        UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: id, content: c, trigger: trigger))
+    }
+
     static func remove(id: String) {
         guard available else { return }
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])

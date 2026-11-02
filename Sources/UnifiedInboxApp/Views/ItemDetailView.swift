@@ -175,6 +175,8 @@ struct NoteEditor: View {
                 Spacer()
                 Button("Add to Tasks") { model.sendToTasks(item) }.controlSize(.small)
                 Button("Add to Reminders") { model.sendToReminders(item) }.controlSize(.small)
+                Button("Add to Note") { model.sendToNotes(item) }.controlSize(.small)
+                    .help("Append this message to today's daily note")
             }
             TextEditor(text: $text)
                 .font(.system(size: 13))

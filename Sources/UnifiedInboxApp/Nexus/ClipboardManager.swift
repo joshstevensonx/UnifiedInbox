@@ -22,7 +22,6 @@ final class ClipboardManager: ObservableObject {
     private var timer: Timer?
     private var lastChangeCount = NSPasteboard.general.changeCount
     private var ignoreChangeCount: Int?
-    private var hotKey: GlobalHotKey?
     private var panel: NSPanel?
     private var keyMonitor: Any?
     private var resignObserver: NSObjectProtocol?
@@ -31,9 +30,7 @@ final class ClipboardManager: ObservableObject {
         history = store.load() ?? ClipHistory(limit: 200)
         isEnabled = UserDefaults.standard.object(forKey: "clipboardEnabled") as? Bool ?? true
         restartTimer()
-        hotKey = GlobalHotKey(keyCode: UInt32(kVK_ANSI_V), modifiers: UInt32(controlKey | optionKey)) { [weak self] in
-            Task { @MainActor in self?.togglePanel() }
-        }
+        // ⌃⌥V is registered by `HotkeyManager` (id "clipboard").
     }
 
     var results: [ClipEntry] { history.search(query, kind: kindFilter) }
@@ -125,6 +122,7 @@ final class ClipboardManager: ObservableObject {
 
     func togglePanel() {
         if let panel, panel.isVisible { closePanel(); return }
+        if AppLock.shared.isLocked { AppLock.shared.unlock { [weak self] in self?.togglePanel() }; return }
         query = ""; kindFilter = nil; selection = 0
         let panel = self.panel ?? makePanel()
         self.panel = panel

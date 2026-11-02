@@ -109,6 +109,17 @@ extension AppModel {
             self.widgets.showAll(!self.widgets.anyVisible)
         })
 
+        c += windowPaletteCommands()
+        c += notesPaletteCommands()
+        c += habitPaletteCommands()
+        c += automationPaletteCommands()
+        for tool in FileToolsModel.Tool.allCases {
+            c.append(PaletteCommand(id: "files.\(tool)", title: "Find \(tool.rawValue)", symbol: "externaldrive",
+                                    keywords: ["files", "disk", "space", "cleanup", "storage"]) { [weak self] in
+                self?.files.tool = tool; self?.section = .files; self?.openInbox()
+            })
+        }
+
         // System
         c.append(PaletteCommand(id: "system.pauseMonitoring", title: monitor.isPaused ? "Resume Monitoring" : "Pause Monitoring",
                                 symbol: "waveform.path.ecg", keywords: ["cpu", "metrics"]) { [weak self] in

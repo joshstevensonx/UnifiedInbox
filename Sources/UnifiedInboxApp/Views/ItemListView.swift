@@ -134,6 +134,7 @@ struct ItemListView: View {
         .help("Hides the message and notifies you when it comes back")
         Button("Add to Tasks") { model.sendToTasks(item) }
         Button("Add to Apple Reminders") { model.sendToReminders(item) }
+        Button("Add to Today's Note") { model.sendToNotes(item) }
         Divider()
         Button("Copy Message") {
             NSPasteboard.general.clearContents()

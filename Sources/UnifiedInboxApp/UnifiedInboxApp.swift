@@ -20,6 +20,15 @@ struct UnifiedInboxApp: App {
                 .environmentObject(model.media)
                 .environmentObject(model.capture)
                 .environmentObject(model.focus)
+                .environmentObject(model.windows)
+                .environmentObject(model.notes)
+                .environmentObject(model.files)
+                .environmentObject(model.habits)
+                .environmentObject(model.hotkeys)
+                .environmentObject(model.automation)
+                .environmentObject(model.snippets)
+                .lockable()
+                .environmentObject(model.lock)
                 .frame(minWidth: 820, minHeight: 500)
         }
         .commands {
@@ -39,9 +48,14 @@ struct UnifiedInboxApp: App {
                 }
             }
             CommandMenu("Go") {
-                ForEach(AppSection.allCases, id: \.self) { s in
-                    Button(s.title) { model.section = s; model.openInbox() }
-                        .keyboardShortcut(KeyEquivalent(Character("\(AppSection.allCases.firstIndex(of: s)! + 1)")), modifiers: .command)
+                ForEach(Array(AppSection.allCases.enumerated()), id: \.element) { index, s in
+                    // ⌘1…⌘9 for the first nine pages; the rest are reachable from the sidebar and palette.
+                    if index < 9 {
+                        Button(s.title) { model.section = s; model.openInbox() }
+                            .keyboardShortcut(KeyEquivalent(Character("\(index + 1)")), modifiers: .command)
+                    } else {
+                        Button(s.title) { model.section = s; model.openInbox() }
+                    }
                 }
             }
             CommandMenu("Tools") {
@@ -73,6 +87,8 @@ struct UnifiedInboxApp: App {
                 .environmentObject(model.monitor)
                 .environmentObject(model.media)
                 .environmentObject(model.focus)
+                .lockable()
+                .environmentObject(model.lock)
         } label: {
             MenuBarLabel().environmentObject(model).environmentObject(model.focus)
         }
@@ -85,6 +101,9 @@ struct UnifiedInboxApp: App {
                 .environmentObject(model.monitor)
                 .environmentObject(model.launcher)
                 .environmentObject(model.clipboard)
+                .environmentObject(model.lock)
+                .environmentObject(model.windows)
+                .environmentObject(model.hotkeys)
         }
     }
 }

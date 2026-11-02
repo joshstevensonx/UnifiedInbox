@@ -8,7 +8,7 @@ import SwiftUI
 
 /// Top-level areas of the app (NEXUS pages + the unified inbox).
 enum AppSection: String, Hashable, CaseIterable {
-    case overview, monitor, launcher, widgets, apps, clipboard, focus, inbox
+    case overview, monitor, launcher, widgets, apps, clipboard, focus, habits, notes, windows, files, automation, snippets, inbox
 
     var title: String {
         switch self {
@@ -19,6 +19,12 @@ enum AppSection: String, Hashable, CaseIterable {
         case .apps: return "Apps"
         case .clipboard: return "Clipboard"
         case .focus: return "Focus"
+        case .notes: return "Notes"
+        case .habits: return "Habits"
+        case .windows: return "Windows"
+        case .files: return "Files"
+        case .automation: return "Automation"
+        case .snippets: return "Snippets"
         case .inbox: return "Inbox"
         }
     }
@@ -32,6 +38,12 @@ enum AppSection: String, Hashable, CaseIterable {
         case .apps: return "app.badge"
         case .clipboard: return "doc.on.clipboard"
         case .focus: return "timer"
+        case .notes: return "note.text"
+        case .habits: return "checkmark.seal"
+        case .windows: return "rectangle.split.2x1"
+        case .files: return "externaldrive"
+        case .automation: return "bolt"
+        case .snippets: return "text.insert"
         case .inbox: return "tray"
         }
     }
@@ -77,7 +89,7 @@ final class AppModel: ObservableObject {
     @Published var quickLookHotKey: Bool {
         didSet {
             UserDefaults.standard.set(quickLookHotKey, forKey: Keys.quickLookHotKey)
-            quickLook?.setHotKeyEnabled(quickLookHotKey)
+            hotkeys.setGroupEnabled("quickLook", quickLookHotKey)
         }
     }
 
@@ -85,7 +97,22 @@ final class AppModel: ObservableObject {
     @Published var launcherHotKey: Bool {
         didSet {
             UserDefaults.standard.set(launcherHotKey, forKey: Keys.launcherHotKey)
-            launcherPanel.setHotKeyEnabled(launcherHotKey)
+            hotkeys.setGroupEnabled("launcher", launcherHotKey)
+        }
+    }
+
+    /// Global ⌃⌥ arrow / ↩ / C window tiling shortcuts.
+    @Published var tilingHotKeys: Bool {
+        didSet {
+            UserDefaults.standard.set(tilingHotKeys, forKey: Keys.tilingHotKeys)
+            hotkeys.setGroupEnabled("tiling", tilingHotKeys)
+        lockObserver = NotificationCenter.default.addObserver(forName: .appDidLock, object: nil, queue: .main) { [weak self] _ in
+            Task { @MainActor in
+                self?.quickLook?.close()
+                self?.launcherPanel.close()
+                self?.clipboard.closePanel()
+            }
+        }
         }
     }
 
@@ -107,6 +134,15 @@ final class AppModel: ObservableObject {
     let media: MediaController
     let capture: CaptureService
     let focus: FocusModel
+    let windows: WindowManager
+    let notes: NotesModel
+    let files: FileToolsModel
+    let habits: HabitsModel
+    let lock: AppLock
+    let hotkeys: HotkeyManager
+    let automation: AutomationManager
+    let snippets: SnippetEngine
+    private var lockObserver: NSObjectProtocol?
     private var quickLook: QuickLookController?
 
     let store: InboxStore?
@@ -129,6 +165,7 @@ final class AppModel: ObservableObject {
         static let quickLookHotKey = "quickLookHotKey"
         static let launcherHotKey = "launcherHotKey"
         static let lastSection = "lastSection"
+        static let tilingHotKeys = "tilingHotKeys"
     }
 
     var totalUnread: Int { unreadCounts.values.reduce(0, +) }
@@ -136,6 +173,8 @@ final class AppModel: ObservableObject {
     var visiblePlatforms: [Platform] { Platform.allCases.filter(enabledPlatforms.contains) }
 
     init() {
+        // A restore picked in Settings → Security is swapped in before any data file is opened.
+        BackupService.applyPendingRestore()
         let d = UserDefaults.standard
         ruleSet = JSONFileStore<RuleSet>(url: JSONFileStore<RuleSet>.defaultURL("rules")).load() ?? RuleSet()
         // Locals first: `self` can't be read until every stored property is set.
@@ -150,6 +189,15 @@ final class AppModel: ObservableObject {
         media = MediaController()
         capture = CaptureService()
         focus = FocusModel()
+        windows = WindowManager()
+        notes = NotesModel()
+        files = FileToolsModel()
+        habits = HabitsModel()
+        lock = AppLock.shared
+        hotkeys = HotkeyManager()
+        automation = AutomationManager()
+        snippets = SnippetEngine()
+        tilingHotKeys = d.object(forKey: Keys.tilingHotKeys) as? Bool ?? true
         launcherHotKey = d.object(forKey: Keys.launcherHotKey) as? Bool ?? true
         section = d.string(forKey: Keys.lastSection).flatMap(AppSection.init(rawValue:)) ?? .overview
         let platforms = Platform.decodeSet(d.string(forKey: Keys.enabledPlatforms))
@@ -182,11 +230,11 @@ final class AppModel: ObservableObject {
         }
         keyboard = KeyboardTriage(model: self)
         quickLook = QuickLookController(model: self)
-        quickLook?.setHotKeyEnabled(quickLookHotKey)
         PriorityNotifier.requestAuthorizationIfPossible()
         launcherPanel.model = self
-        launcherPanel.setHotKeyEnabled(launcherHotKey)
         widgets.attach(model: self)
+        registerHotkeys()
+        automation.attach(model: self)
     }
 
     // MARK: Capture
@@ -227,6 +275,7 @@ final class AppModel: ObservableObject {
     }
 
     private func handleNew(_ items: [InboxItem]) {
+        automation.newMessages(items)
         guard priorityAlerts else { return }
         let rules = self.rules
         for item in items where item.isPriority {

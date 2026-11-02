@@ -69,44 +69,44 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 | 11 | Inbox rules engine (sender / keyword / app → archive, pin, label, mute), labels with colours, quiet hours, auto-archive read messages | ✅ |
 | 12 | Saved searches in the sidebar, private notes, "Remind me", Add to Tasks / Apple Reminders, export by date range | ✅ |
 | 13 | Threshold alerts (CPU sustained, memory pressure, low battery, low disk; debounced + cooldown) and 24 h battery / storage history charts | ✅ |
-| 14 | Window tiling + workspaces (Accessibility) | ⬜ |
-| 15 | Notes: Markdown, [[backlinks]], daily notes | ⬜ |
-| 16 | File tools: large files, Downloads cleanup, duplicates | ⬜ |
-| 17 | Habits + weekly review | ⬜ |
-| 18 | Touch ID app lock + AES-GCM encrypted backup / restore | ⬜ |
-| 19 | Hotkey manager with rebinding | ⬜ |
-| 20 | Automation rules (triggers → actions, cooldown, run log) | ⬜ |
-| 21 | Text snippet expansion (Accessibility) | ⬜ |
+| 14 | Window tiling (16 layouts, ⌃⌥ hotkeys, ½→⅓→⅔ cycling, gaps, next display) + workspaces (save / switch apps and window frames, hide others) | ✅ |
+| 15 | Notes: plain `.md` files, Markdown preview with clickable tasks, [[links]] (click to open / create), backlinks + unlinked mentions, rename updates links, #tags, daily notes, "Add to Note" from a message | ✅ |
+| 16 | File tools: large-file finder (size threshold, skips Library/.git/node_modules), Downloads cleanup by category with age-based suggestions, byte-exact duplicate finder (keep oldest/newest), Move to Trash with confirmation | ✅ |
+| 17 | Habits (daily / weekdays / N× per week, 7-day grid, streaks, 30-day rate, daily reminder) + weekly review (tasks, focus chart, habits, screen time, messages, reflection, save as note) | ✅ |
+| 18 | App lock (Touch ID or Mac password; after N min away, on sleep, on screen lock; covers window, menu bar, quick look, clipboard, launcher) + encrypted backup (AES-256-GCM, PBKDF2-SHA256 210k) and staged restore with automatic restart | ✅ |
+| 19 | Hotkey manager: one registry for all global shortcuts, record / clear / reset per action, conflict and "owned by another app" warnings, extra assignable actions (today's note, focus, screenshot, OCR, lock, play/pause, every tile layout) | ✅ |
+| 20 | Automation: triggers (new message with filters, app opens / quits, time of day + weekdays, battery low, CPU high, focus start / end) → actions (notify, open / quit / hide app, URL, workspace, focus, Shortcuts, sound, copy, task, daily note, privacy mode, palette command) with {placeholders}, cooldown, loop guard, Run Now, run log | ✅ |
+| 21 | Text snippets: abbreviation → expansion in any app (global key monitor + paste, clipboard restored, transient so clipboard history skips it), {date} {time} {clipboard} {cursor}…, word-boundary matching, overlap warnings, excluded apps, never in password fields | ✅ |
 | 22 | Process manager (all processes) + log viewer | ⬜ |
 | 23 | `inboxctl` CLI + stdio MCP server over the local DB | ⬜ |
 | 24 | Ambient clock, density / accent settings, hot-corner launcher, daily digest | ⬜ |
 
 ## From the feature spec: good next candidates
-- ⬜ Window snapping / tiling layouts (needs Accessibility permission) §6.2
-- ⬜ Workspaces: save/restore running apps + window positions §2.2
-- ⬜ Text expansion / snippets (needs Accessibility) §1.4
-- ⬜ Notes with Markdown, backlinks, daily notes §10
-- ⬜ File tools: large-file finder, Downloads cleanup, duplicates §3.3
+- ✅ Window snapping / tiling layouts (needs Accessibility permission) §6.2
+- ✅ Workspaces: save/restore running apps + window positions §2.2
+- ✅ Text expansion / snippets (needs Accessibility) §1.4
+- ✅ Notes with Markdown, backlinks, daily notes §10
+- ✅ File tools: large-file finder, Downloads cleanup, duplicates §3.3
 - ✅ Threshold alerts: CPU, memory pressure, low battery, low disk §4.4 (batch 5)
-- ⬜ Habit tracker + weekly review §11.3–11.4
-- ⬜ Hotkey manager with rebinding §8.1
-- ⬜ App lock with Touch ID §13.1
+- ✅ Habit tracker + weekly review §11.3–11.4
+- ✅ Hotkey manager with rebinding §8.1
+- ✅ App lock with Touch ID §13.1
 - ⬜ Not planned: private-API features (MediaRemote, fan/temperature via SMC, /etc/hosts blocking)
 
 ## NEXUS: not built yet
 - ⬜ Process manager (P1)
-- ⬜ Workspaces: save / switch layouts (P1)
+- ✅ Workspaces: save / switch layouts (P1)
 - ⬜ Ambient clocks and scenes
 - ✅ Threshold alerts: CPU, memory pressure, low battery, low disk (opt-in, debounced)
-- ⬜ Automation rules
-- ⬜ Launcher edge / hot-corner reveal; configurable hotkeys
+- ✅ Automation rules
+- ⬜ Launcher edge / hot-corner reveal (task 24); ✅ configurable hotkeys
 - ✅ Battery and storage history charts (24 h)
 
 ## Up next (batch 4)
 - ✅ Saved searches as sidebar items (S)
 - ✅ Quiet hours per app (S)
 - ✅ Private notes on a message (S)
-- ⬜ Touch ID lock (S)
+- ✅ Touch ID lock (S)
 
 ## Messages when apps are fully closed
 A closed app posts no notifications, so local capture can't see its messages. "Keep running" (batch 2) covers most cases.
@@ -160,13 +160,13 @@ The complete fix is per platform:
 - ✅ Export CSV / JSON / Markdown (by date range / client: ⬜)
 - ⬜ Local CLI / API (M)
 - ⬜ MCP server so AI assistants can query the inbox locally (M)
-- ⬜ Encrypted backup & restore (S)
+- ✅ Encrypted backup & restore (S)
 - ⬜ End-to-end encrypted sync between Macs (L)
 - ⬜ Per-client message counts for billing (M)
 
 ## Security & reliability
 - ⬜ SQLCipher-encrypted database, key in Keychain (M)
-- ⬜ Touch ID lock (S)
+- ✅ Touch ID lock (S)
 - ✅ Privacy mode: mask previews in menu bar / quick look / banners (widgets: ⬜)
 - ⬜ Capture self-healing after macOS updates (M)
 - ⬜ Sparkle auto-updates + notarized DMG (M)

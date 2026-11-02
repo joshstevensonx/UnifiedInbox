@@ -188,13 +188,75 @@ If ⌃⌥Space does nothing, another app already uses that shortcut. Quit that a
 | ⌃⌥V | Clipboard history: ↑↓ then ↩ copies, then ⌘V to paste |
 | ⌥⇧⌘4 / ⌥⇧⌘2 | Screenshot region / copy text from screen (OCR) |
 | ⇧⌘F | Start / stop a focus session |
-| ⌘1 … ⌘8 | Overview, Monitor, Launcher, Widgets, Apps, Clipboard, Focus, Inbox |
+| ⌘1 … ⌘9 | The first nine pages in the Go menu (Overview, Monitor, Launcher, Widgets, Apps, Clipboard, Focus, Windows, …). The rest are in the sidebar and ⌥Space |
+| ⌃⌥← → ↑ ↓ | Tile the focused window to a half (press again to cycle ½ → ⅓ → ⅔) |
+| ⌃⌥↩ / ⌃⌥C | Maximize / center the focused window |
 
 First use of each tool asks macOS for its permission once: Screen Recording (screenshots/OCR),
 Automation (Music/Spotify control) and Notifications (reminders, timer). Check them all in **Settings → Privacy**.
 
 App icon: built into the .app by `build-app.sh`. To change it, edit `scripts/make_icon.py` and run `python3 scripts/make_icon.py`.
 If the Dock still shows the old icon, run `killall Dock`.
+
+### System alerts and history
+**Settings → Nexus → System alerts**: turn on alerts for high CPU (sustained), memory pressure, low battery and low disk.
+Each alert fires once per breach, then waits until the condition clears and the cooldown passes.
+**System Monitor → Battery / Storage** charts the last 24 hours (one point every 5 minutes, kept across restarts).
+
+### Windows: tiling and workspaces
+**Windows** page (Tools section). Tiling needs **Accessibility** permission: the first tile asks for it, or use
+System Settings → Privacy & Security → Accessibility and add `UnifiedInbox.app`. Rebuilding the app can reset the
+permission; remove and re-add the app if tiling stops working.
+- **Tiling**: click a layout or use ⌃⌥ arrows / ↩ / C. Set a gap between windows. "Move to Next Display".
+- **Workspaces**: "Save Current…" stores open apps and their window positions. "Switch" reopens missing apps in
+  the background and puts windows back (optionally hiding other apps). Also in ⌥Space: type `workspace`.
+
+### Notes
+**Notes** page (Tools). Each note is a plain Markdown file in `~/Library/Application Support/UnifiedInbox/Notes/`
+("Show Folder"), so any editor works too. Type `[[Another note]]` to link; click the link in Preview to open it
+(or create it). The bottom of a note lists notes that link to it and notes that mention it without a link.
+Renaming a note (edit the title, press ↩) updates links everywhere. The calendar button opens today's daily note.
+Search with `#tag` to filter by tag. Right-click a message → "Add to Today's Note".
+
+### Files
+**Files** page (Tools): **Large Files** (pick a folder and a minimum size), **Downloads** (grouped by type, with
+suggestions: installers/archives older than a week, anything else older than 90 days) and **Duplicates**
+(byte-for-byte identical files; select all but the oldest or newest copy). Selected items go to the **Trash**
+after you confirm, so they can be restored. macOS asks once before the app reads Desktop, Documents or Downloads.
+
+### Habits and weekly review
+**Habits** page (Tools). Add a habit (every day, certain weekdays, or N times a week, with an optional daily
+reminder), then tick the circles for the last 7 days. 🔥 is the current streak; the percentage is the last 30 days.
+**Weekly Review** sums up the week: tasks done, focus minutes per day, habits, screen time and messages received.
+Write a reflection and "Save as Note" to keep it in Notes. ⌥Space: type `done` to tick today's habits.
+
+### App lock and encrypted backup
+**Settings → Security**. "Require Touch ID" (or your Mac password on Macs without Touch ID) locks the window,
+menu-bar panel, quick look, launcher and clipboard history after you've been away for the chosen time, when the
+Mac sleeps or when the screen locks. Capture keeps running while locked.
+**Back Up Now…** writes one encrypted `.uibackup` file (messages, notes, tasks, habits, rules, settings files).
+**Restore…** asks for the password, then restarts the app to swap the data in; your previous data is kept in
+`~/Library/Application Support/UnifiedInbox.before-restore/`. There is no way to recover a forgotten password.
+
+### Shortcuts
+**Settings → Shortcuts** lists every global shortcut. Click one and press the new keys (⌃, ⌥ or ⌘ plus a key);
+⎋ cancels and ⌫ removes it. ⚠︎ means another app owns the combination. Extra actions (today's note, focus timer,
+screenshot, OCR, lock, play/pause, all window layouts) have no shortcut until you record one.
+
+### Automation
+**Automation** page (Tools). A rule is "when this happens → do these things": a new message (filter by app,
+sender, text, priority), an app opening or quitting, a time of day, low battery, high CPU, or a focus session
+starting / ending. Actions include notifications, opening / quitting / hiding apps, URLs, workspaces, the focus
+timer, running a Shortcut, sounds, copying text, adding a task or a line to today's note, and privacy mode.
+Use `{sender}`, `{text}`, `{app}`, `{time}` etc. in text. "Run Now" tests a rule; the **Run Log** shows what ran.
+"Add Examples" adds a few turned-off rules to start from.
+
+### Snippets
+**Snippets** page (Tools). Turn on "Expand snippets", allow **Accessibility** when asked, then type an
+abbreviation such as `;date` in any app. It's replaced by the expansion (pasted; your clipboard is put back
+half a second later). Placeholders: `{date}` `{time}` `{datetime}` `{isodate}` `{weekday}` `{clipboard}`, and
+`{cursor}` for where the caret should end up. Nothing expands in password fields. Add bundle ids (e.g.
+`com.apple.Terminal`) under "Don't expand in" to switch it off for some apps.
 
 ## 9. Troubleshooting
 
