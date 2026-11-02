@@ -8,7 +8,7 @@ import SwiftUI
 
 /// Top-level areas of the app (NEXUS pages + the unified inbox).
 enum AppSection: String, Hashable, CaseIterable {
-    case overview, monitor, launcher, widgets, apps, clipboard, focus, habits, notes, windows, files, automation, snippets, inbox
+    case overview, monitor, launcher, widgets, apps, clipboard, focus, habits, notes, windows, files, automation, snippets, processes, inbox
 
     var title: String {
         switch self {
@@ -25,6 +25,7 @@ enum AppSection: String, Hashable, CaseIterable {
         case .files: return "Files"
         case .automation: return "Automation"
         case .snippets: return "Snippets"
+        case .processes: return "Processes"
         case .inbox: return "Inbox"
         }
     }
@@ -44,6 +45,7 @@ enum AppSection: String, Hashable, CaseIterable {
         case .files: return "externaldrive"
         case .automation: return "bolt"
         case .snippets: return "text.insert"
+        case .processes: return "cpu"
         case .inbox: return "tray"
         }
     }
@@ -142,6 +144,7 @@ final class AppModel: ObservableObject {
     let hotkeys: HotkeyManager
     let automation: AutomationManager
     let snippets: SnippetEngine
+    let processes: ProcessManager
     private var lockObserver: NSObjectProtocol?
     private var quickLook: QuickLookController?
 
@@ -197,6 +200,7 @@ final class AppModel: ObservableObject {
         hotkeys = HotkeyManager()
         automation = AutomationManager()
         snippets = SnippetEngine()
+        processes = ProcessManager()
         tilingHotKeys = d.object(forKey: Keys.tilingHotKeys) as? Bool ?? true
         launcherHotKey = d.object(forKey: Keys.launcherHotKey) as? Bool ?? true
         section = d.string(forKey: Keys.lastSection).flatMap(AppSection.init(rawValue:)) ?? .overview

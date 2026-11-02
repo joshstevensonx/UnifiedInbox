@@ -77,7 +77,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 | 19 | Hotkey manager: one registry for all global shortcuts, record / clear / reset per action, conflict and "owned by another app" warnings, extra assignable actions (today's note, focus, screenshot, OCR, lock, play/pause, every tile layout) | ✅ |
 | 20 | Automation: triggers (new message with filters, app opens / quits, time of day + weekdays, battery low, CPU high, focus start / end) → actions (notify, open / quit / hide app, URL, workspace, focus, Shortcuts, sound, copy, task, daily note, privacy mode, palette command) with {placeholders}, cooldown, loop guard, Run Now, run log | ✅ |
 | 21 | Text snippets: abbreviation → expansion in any app (global key monitor + paste, clipboard restored, transient so clipboard history skips it), {date} {time} {clipboard} {cursor}…, word-boundary matching, overlap warnings, excluded apps, never in password fields | ✅ |
-| 22 | Process manager (all processes) + log viewer | ⬜ |
+| 22 | Process manager: every process via libproc (CPU, memory, threads, user), search, only-mine, tree view with child totals, quit / force quit with confirmation · Log viewer over `log show` (time window, level, process, subsystem, text; export) | ✅ |
 | 23 | `inboxctl` CLI + stdio MCP server over the local DB | ⬜ |
 | 24 | Ambient clock, density / accent settings, hot-corner launcher, daily digest | ⬜ |
 
@@ -94,7 +94,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 - ⬜ Not planned: private-API features (MediaRemote, fan/temperature via SMC, /etc/hosts blocking)
 
 ## NEXUS: not built yet
-- ⬜ Process manager (P1)
+- ✅ Process manager (P1)
 - ✅ Workspaces: save / switch layouts (P1)
 - ⬜ Ambient clocks and scenes
 - ✅ Threshold alerts: CPU, memory pressure, low battery, low disk (opt-in, debounced)
@@ -170,4 +170,4 @@ The complete fix is per platform:
 - ✅ Privacy mode: mask previews in menu bar / quick look / banners (widgets: ⬜)
 - ⬜ Capture self-healing after macOS updates (M)
 - ⬜ Sparkle auto-updates + notarized DMG (M)
-- ⬜ Local log viewer (S)
+- ✅ Local log viewer (S)

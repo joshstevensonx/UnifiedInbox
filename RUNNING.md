@@ -258,6 +258,13 @@ half a second later). Placeholders: `{date}` `{time}` `{datetime}` `{isodate}` `
 `{cursor}` for where the caret should end up. Nothing expands in password fields. Add bundle ids (e.g.
 `com.apple.Terminal`) under "Don't expand in" to switch it off for some apps.
 
+### Processes and logs
+**Processes** page (Nexus section): every process with CPU (share of one core), memory, threads and owner.
+Search by name / PID / path, show only yours, or switch to the tree view. Right-click to quit, force quit
+(confirmed), show its logs, or see totals including child processes. Other users' processes (root) can't be
+inspected or stopped without admin rights. **Logs** reads the system log with `log show` for the last few
+minutes, filtered by level, process, subsystem or text; "This App" shows Unified Inbox's own log.
+
 ## 9. Troubleshooting
 
 | Symptom | Fix |

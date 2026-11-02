@@ -27,6 +27,7 @@ struct UnifiedInboxApp: App {
                 .environmentObject(model.hotkeys)
                 .environmentObject(model.automation)
                 .environmentObject(model.snippets)
+                .environmentObject(model.processes)
                 .lockable()
                 .environmentObject(model.lock)
                 .frame(minWidth: 820, minHeight: 500)

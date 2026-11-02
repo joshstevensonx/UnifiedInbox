@@ -66,7 +66,7 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 | 19 | Hotkey manager with rebinding (central registry over `GlobalHotKey`) | ✅ `NexusCore/Hotkeys/Hotkeys.swift` (+`HotkeyTests`), `Nexus/HotkeyManager.swift`, Settings → Shortcuts |
 | 20 | Automation rules (triggers → actions, cooldown, run log) | ✅ `NexusCore/Automation/Automation.swift` (+`AutomationTests`), `Nexus/AutomationManager.swift`, Automation page; `AppModel.handleNew` calls `automation.newMessages` |
 | 21 | Text snippet expansion (event tap, Accessibility) | ✅ `NexusCore/Productivity/Snippets.swift` (+`SnippetTests`), `Nexus/SnippetEngine.swift` (NSEvent global monitor, not a CGEventTap), Snippets page |
-| 22 | Process manager (libproc, all processes) + log viewer | ⬜ |
+| 22 | Process manager (libproc, all processes) + log viewer | ✅ `NexusCore/Monitoring/Processes.swift` (+`ProcessTests`), `Nexus/ProcessManager.swift`, Processes page (Nexus section) |
 | 23 | `inboxctl` CLI + stdio MCP server over the local DB | ⬜ |
 | 24 | Ambient clock, density/accent settings, hot-corner launcher, daily digest (FoundationModels if available) | ⬜ |
 | 25 | Verify, update FEATURES/RUNNING, sync | ⬜ |

@@ -39,6 +39,7 @@ struct ContentView: View {
         case .files: FilesView()
         case .automation: AutomationView()
         case .snippets: SnippetsView()
+        case .processes: ProcessesView()
         case .inbox: EmptyView()
         }
     }
