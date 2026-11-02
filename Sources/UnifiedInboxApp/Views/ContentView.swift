@@ -37,6 +37,7 @@ struct ContentView: View {
         case .notes: NotesView()
         case .habits: HabitsView()
         case .files: FilesView()
+        case .automation: AutomationView()
         case .inbox: EmptyView()
         }
     }

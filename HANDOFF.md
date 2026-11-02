@@ -64,7 +64,7 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 | 17 | Habits + weekly review | ✅ `NexusCore/Productivity/Habits.swift` (+`HabitsTests`), `Nexus/HabitsModel.swift`, Habits page |
 | 18 | Touch ID app lock + AES-GCM encrypted backup/restore | ✅ `NexusCore/Security/Backup.swift` (+`BackupTests`; encryption test runs on Mac only), `InboxStore.backup(toPath:)` (+`BackupStoreTests`), `Nexus/Security.swift`, Settings → Security |
 | 19 | Hotkey manager with rebinding (central registry over `GlobalHotKey`) | ✅ `NexusCore/Hotkeys/Hotkeys.swift` (+`HotkeyTests`), `Nexus/HotkeyManager.swift`, Settings → Shortcuts |
-| 20 | Automation rules (triggers → actions, cooldown, run log) | ⬜ |
+| 20 | Automation rules (triggers → actions, cooldown, run log) | ✅ `NexusCore/Automation/Automation.swift` (+`AutomationTests`), `Nexus/AutomationManager.swift`, Automation page; `AppModel.handleNew` calls `automation.newMessages` |
 | 21 | Text snippet expansion (event tap, Accessibility) | ⬜ |
 | 22 | Process manager (libproc, all processes) + log viewer | ⬜ |
 | 23 | `inboxctl` CLI + stdio MCP server over the local DB | ⬜ |
@@ -72,7 +72,7 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 | 25 | Verify, update FEATURES/RUNNING, sync | ⬜ |
 
 ### Notes for later tasks
-- When adding Automation (task 20), call `automation?.newMessages(items)` at the top of `AppModel.handleNew` (removed at handoff because the type doesn't exist yet).
+- Automation: new event sources go through `AutomationManager.handle(_:)`; new actions need a case in `AutomationAction`, `perform`, the editor menu and `ActionFields`.
 - New global hotkeys: add a `HotkeyManager.Action` in `AppModel.registerHotkeys()` (HotkeyManager.swift). Don't create `GlobalHotKey` directly any more. Defaults: ⌃⌥Space quick look, ⌥Space palette, ⌃⌥V clipboard, ⌃⌥ arrows/↩/C tiling; other actions are unassigned until the user records one.
 - The per-feature toggles (quick look, launcher, tiling) switch whole hotkey groups on/off via `hotkeys.setGroupEnabled`.
 - Sidebar pages are `AppSection` cases (AppModel.swift). Add a case, title, symbol, `SidebarView` row, `ContentView.page` switch case, `pageHelp`, and environment objects in `UnifiedInboxApp.swift`.

@@ -243,6 +243,14 @@ Mac sleeps or when the screen locks. Capture keeps running while locked.
 ⎋ cancels and ⌫ removes it. ⚠︎ means another app owns the combination. Extra actions (today's note, focus timer,
 screenshot, OCR, lock, play/pause, all window layouts) have no shortcut until you record one.
 
+### Automation
+**Automation** page (Tools). A rule is "when this happens → do these things": a new message (filter by app,
+sender, text, priority), an app opening or quitting, a time of day, low battery, high CPU, or a focus session
+starting / ending. Actions include notifications, opening / quitting / hiding apps, URLs, workspaces, the focus
+timer, running a Shortcut, sounds, copying text, adding a task or a line to today's note, and privacy mode.
+Use `{sender}`, `{text}`, `{app}`, `{time}` etc. in text. "Run Now" tests a rule; the **Run Log** shows what ran.
+"Add Examples" adds a few turned-off rules to start from.
+
 ## 9. Troubleshooting
 
 | Symptom | Fix |

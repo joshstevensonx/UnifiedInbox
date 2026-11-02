@@ -112,6 +112,7 @@ extension AppModel {
         c += windowPaletteCommands()
         c += notesPaletteCommands()
         c += habitPaletteCommands()
+        c += automationPaletteCommands()
         for tool in FileToolsModel.Tool.allCases {
             c.append(PaletteCommand(id: "files.\(tool)", title: "Find \(tool.rawValue)", symbol: "externaldrive",
                                     keywords: ["files", "disk", "space", "cleanup", "storage"]) { [weak self] in

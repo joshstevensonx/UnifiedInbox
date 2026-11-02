@@ -75,7 +75,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 | 17 | Habits (daily / weekdays / N× per week, 7-day grid, streaks, 30-day rate, daily reminder) + weekly review (tasks, focus chart, habits, screen time, messages, reflection, save as note) | ✅ |
 | 18 | App lock (Touch ID or Mac password; after N min away, on sleep, on screen lock; covers window, menu bar, quick look, clipboard, launcher) + encrypted backup (AES-256-GCM, PBKDF2-SHA256 210k) and staged restore with automatic restart | ✅ |
 | 19 | Hotkey manager: one registry for all global shortcuts, record / clear / reset per action, conflict and "owned by another app" warnings, extra assignable actions (today's note, focus, screenshot, OCR, lock, play/pause, every tile layout) | ✅ |
-| 20 | Automation rules (triggers → actions, cooldown, run log) | ⬜ |
+| 20 | Automation: triggers (new message with filters, app opens / quits, time of day + weekdays, battery low, CPU high, focus start / end) → actions (notify, open / quit / hide app, URL, workspace, focus, Shortcuts, sound, copy, task, daily note, privacy mode, palette command) with {placeholders}, cooldown, loop guard, Run Now, run log | ✅ |
 | 21 | Text snippet expansion (Accessibility) | ⬜ |
 | 22 | Process manager (all processes) + log viewer | ⬜ |
 | 23 | `inboxctl` CLI + stdio MCP server over the local DB | ⬜ |
@@ -98,7 +98,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 - ✅ Workspaces: save / switch layouts (P1)
 - ⬜ Ambient clocks and scenes
 - ✅ Threshold alerts: CPU, memory pressure, low battery, low disk (opt-in, debounced)
-- ⬜ Automation rules
+- ✅ Automation rules
 - ⬜ Launcher edge / hot-corner reveal (task 24); ✅ configurable hotkeys
 - ✅ Battery and storage history charts (24 h)
 

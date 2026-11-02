@@ -8,7 +8,7 @@ import SwiftUI
 
 /// Top-level areas of the app (NEXUS pages + the unified inbox).
 enum AppSection: String, Hashable, CaseIterable {
-    case overview, monitor, launcher, widgets, apps, clipboard, focus, habits, notes, windows, files, inbox
+    case overview, monitor, launcher, widgets, apps, clipboard, focus, habits, notes, windows, files, automation, inbox
 
     var title: String {
         switch self {
@@ -23,6 +23,7 @@ enum AppSection: String, Hashable, CaseIterable {
         case .habits: return "Habits"
         case .windows: return "Windows"
         case .files: return "Files"
+        case .automation: return "Automation"
         case .inbox: return "Inbox"
         }
     }
@@ -40,6 +41,7 @@ enum AppSection: String, Hashable, CaseIterable {
         case .habits: return "checkmark.seal"
         case .windows: return "rectangle.split.2x1"
         case .files: return "externaldrive"
+        case .automation: return "bolt"
         case .inbox: return "tray"
         }
     }
@@ -136,6 +138,7 @@ final class AppModel: ObservableObject {
     let habits: HabitsModel
     let lock: AppLock
     let hotkeys: HotkeyManager
+    let automation: AutomationManager
     private var lockObserver: NSObjectProtocol?
     private var quickLook: QuickLookController?
 
@@ -189,6 +192,7 @@ final class AppModel: ObservableObject {
         habits = HabitsModel()
         lock = AppLock.shared
         hotkeys = HotkeyManager()
+        automation = AutomationManager()
         tilingHotKeys = d.object(forKey: Keys.tilingHotKeys) as? Bool ?? true
         launcherHotKey = d.object(forKey: Keys.launcherHotKey) as? Bool ?? true
         section = d.string(forKey: Keys.lastSection).flatMap(AppSection.init(rawValue:)) ?? .overview
@@ -226,6 +230,7 @@ final class AppModel: ObservableObject {
         launcherPanel.model = self
         widgets.attach(model: self)
         registerHotkeys()
+        automation.attach(model: self)
     }
 
     // MARK: Capture
@@ -266,6 +271,7 @@ final class AppModel: ObservableObject {
     }
 
     private func handleNew(_ items: [InboxItem]) {
+        automation.newMessages(items)
         guard priorityAlerts else { return }
         let rules = self.rules
         for item in items where item.isPriority {

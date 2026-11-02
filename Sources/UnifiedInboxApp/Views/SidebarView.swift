@@ -33,7 +33,7 @@ struct SidebarView: View {
             }
 
             Section {
-                ForEach([AppSection.focus, .habits, .notes, .windows, .files, .apps, .clipboard], id: \.self) { page in
+                ForEach([AppSection.focus, .habits, .notes, .windows, .files, .automation, .apps, .clipboard], id: \.self) { page in
                     pageRow(page)
                 }
             } header: {
@@ -151,6 +151,7 @@ struct SidebarView: View {
         case .focus: return "Tasks and Pomodoro focus timer"
         case .habits: return "Habit tracker with streaks, and a weekly review of tasks, focus, habits and screen time"
         case .notes: return "Markdown notes with [[links]], backlinks and daily notes"
+        case .automation: return "Rules that act on messages, apps, time, battery, CPU and focus sessions"
         case .files: return "Find large files and duplicates, clean up Downloads"
         case .windows: return "Tile windows (⌃⌥ arrows) and save / switch workspaces"
         case .inbox: return "Unified inbox"
