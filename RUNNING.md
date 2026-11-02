@@ -188,13 +188,28 @@ If ⌃⌥Space does nothing, another app already uses that shortcut. Quit that a
 | ⌃⌥V | Clipboard history: ↑↓ then ↩ copies, then ⌘V to paste |
 | ⌥⇧⌘4 / ⌥⇧⌘2 | Screenshot region / copy text from screen (OCR) |
 | ⇧⌘F | Start / stop a focus session |
-| ⌘1 … ⌘8 | Overview, Monitor, Launcher, Widgets, Apps, Clipboard, Focus, Inbox |
+| ⌘1 … ⌘9 | The first nine pages in the Go menu (Overview, Monitor, Launcher, Widgets, Apps, Clipboard, Focus, Windows, …). The rest are in the sidebar and ⌥Space |
+| ⌃⌥← → ↑ ↓ | Tile the focused window to a half (press again to cycle ½ → ⅓ → ⅔) |
+| ⌃⌥↩ / ⌃⌥C | Maximize / center the focused window |
 
 First use of each tool asks macOS for its permission once: Screen Recording (screenshots/OCR),
 Automation (Music/Spotify control) and Notifications (reminders, timer). Check them all in **Settings → Privacy**.
 
 App icon: built into the .app by `build-app.sh`. To change it, edit `scripts/make_icon.py` and run `python3 scripts/make_icon.py`.
 If the Dock still shows the old icon, run `killall Dock`.
+
+### System alerts and history
+**Settings → Nexus → System alerts**: turn on alerts for high CPU (sustained), memory pressure, low battery and low disk.
+Each alert fires once per breach, then waits until the condition clears and the cooldown passes.
+**System Monitor → Battery / Storage** charts the last 24 hours (one point every 5 minutes, kept across restarts).
+
+### Windows: tiling and workspaces
+**Windows** page (Tools section). Tiling needs **Accessibility** permission: the first tile asks for it, or use
+System Settings → Privacy & Security → Accessibility and add `UnifiedInbox.app`. Rebuilding the app can reset the
+permission; remove and re-add the app if tiling stops working.
+- **Tiling**: click a layout or use ⌃⌥ arrows / ↩ / C. Set a gap between windows. "Move to Next Display".
+- **Workspaces**: "Save Current…" stores open apps and their window positions. "Switch" reopens missing apps in
+  the background and puts windows back (optionally hiding other apps). Also in ⌥Space: type `workspace`.
 
 ## 9. Troubleshooting
 

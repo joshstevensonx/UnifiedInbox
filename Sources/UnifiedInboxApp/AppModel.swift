@@ -8,7 +8,7 @@ import SwiftUI
 
 /// Top-level areas of the app (NEXUS pages + the unified inbox).
 enum AppSection: String, Hashable, CaseIterable {
-    case overview, monitor, launcher, widgets, apps, clipboard, focus, inbox
+    case overview, monitor, launcher, widgets, apps, clipboard, focus, windows, inbox
 
     var title: String {
         switch self {
@@ -19,6 +19,7 @@ enum AppSection: String, Hashable, CaseIterable {
         case .apps: return "Apps"
         case .clipboard: return "Clipboard"
         case .focus: return "Focus"
+        case .windows: return "Windows"
         case .inbox: return "Inbox"
         }
     }
@@ -32,6 +33,7 @@ enum AppSection: String, Hashable, CaseIterable {
         case .apps: return "app.badge"
         case .clipboard: return "doc.on.clipboard"
         case .focus: return "timer"
+        case .windows: return "rectangle.split.2x1"
         case .inbox: return "tray"
         }
     }
@@ -89,6 +91,14 @@ final class AppModel: ObservableObject {
         }
     }
 
+    /// Global ⌃⌥ arrow / ↩ / C window tiling shortcuts.
+    @Published var tilingHotKeys: Bool {
+        didSet {
+            UserDefaults.standard.set(tilingHotKeys, forKey: Keys.tilingHotKeys)
+            windows.setHotKeysEnabled(tilingHotKeys)
+        }
+    }
+
     /// Rules, labels, quiet hours, saved searches (rules.json).
     @Published var ruleSet: RuleSet
     private let ruleStore = JSONFileStore<RuleSet>(url: JSONFileStore<RuleSet>.defaultURL("rules"))
@@ -107,6 +117,7 @@ final class AppModel: ObservableObject {
     let media: MediaController
     let capture: CaptureService
     let focus: FocusModel
+    let windows: WindowManager
     private var quickLook: QuickLookController?
 
     let store: InboxStore?
@@ -129,6 +140,7 @@ final class AppModel: ObservableObject {
         static let quickLookHotKey = "quickLookHotKey"
         static let launcherHotKey = "launcherHotKey"
         static let lastSection = "lastSection"
+        static let tilingHotKeys = "tilingHotKeys"
     }
 
     var totalUnread: Int { unreadCounts.values.reduce(0, +) }
@@ -150,6 +162,8 @@ final class AppModel: ObservableObject {
         media = MediaController()
         capture = CaptureService()
         focus = FocusModel()
+        windows = WindowManager()
+        tilingHotKeys = d.object(forKey: Keys.tilingHotKeys) as? Bool ?? true
         launcherHotKey = d.object(forKey: Keys.launcherHotKey) as? Bool ?? true
         section = d.string(forKey: Keys.lastSection).flatMap(AppSection.init(rawValue:)) ?? .overview
         let platforms = Platform.decodeSet(d.string(forKey: Keys.enabledPlatforms))
@@ -187,6 +201,7 @@ final class AppModel: ObservableObject {
         launcherPanel.model = self
         launcherPanel.setHotKeyEnabled(launcherHotKey)
         widgets.attach(model: self)
+        windows.setHotKeysEnabled(tilingHotKeys)
     }
 
     // MARK: Capture

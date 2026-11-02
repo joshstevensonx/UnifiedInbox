@@ -109,6 +109,8 @@ extension AppModel {
             self.widgets.showAll(!self.widgets.anyVisible)
         })
 
+        c += windowPaletteCommands()
+
         // System
         c.append(PaletteCommand(id: "system.pauseMonitoring", title: monitor.isPaused ? "Resume Monitoring" : "Pause Monitoring",
                                 symbol: "waveform.path.ecg", keywords: ["cpu", "metrics"]) { [weak self] in

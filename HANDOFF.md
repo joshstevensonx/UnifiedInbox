@@ -58,7 +58,7 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 | 11 | Inbox rules engine, labels, quiet hours, auto-archive | ✅ core + tests + Settings → Rules tab + sidebar Labels |
 | 12 | Saved searches, private notes, "Remind me", Add to Tasks / Apple Reminders, export by date range | ✅ |
 | 13 | Threshold alerts + battery/storage history | ✅ tests (`ThresholdTests`), wired in `SystemMonitor`, charts in Monitor Battery/Storage tabs, Settings → Nexus → System alerts |
-| 14 | Window tiling + workspaces (Accessibility) | ⬜ |
+| 14 | Window tiling + workspaces (Accessibility) | ✅ `NexusCore/Windows/Tiling.swift` (+`TilingTests`), `Nexus/WindowManager.swift`, Windows page, palette commands |
 | 15 | Notes: Markdown, [[backlinks]], daily notes | ⬜ |
 | 16 | File tools: large files, Downloads cleanup, duplicates | ⬜ |
 | 17 | Habits + weekly review | ⬜ |
@@ -76,7 +76,10 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 - New global hotkeys must use `GlobalHotKey` (QuickLook.swift). It supports several at once via a shared handler keyed by id. Existing: ⌃⌥Space quick look, ⌥Space palette, ⌃⌥V clipboard.
 - Sidebar pages are `AppSection` cases (AppModel.swift). Add a case, title, symbol, `SidebarView` row, `ContentView.page` switch case, `pageHelp`, and environment objects in `UnifiedInboxApp.swift`.
 - Persist feature state with `JSONFileStore<T>` (NexusCore/Launcher/Launcher.swift) under Application Support.
-- Accessibility-based features (tiling, snippets) must check `AXIsProcessTrusted()` and guide the user. Update `PermissionsView` Accessibility row text ("Not used") when they ship.
+- Accessibility-based features must check trust via `AX.isTrusted()` (WindowManager.swift) and guide the user. The `PermissionsView` Accessibility row lists what uses it; add snippets (task 21) there.
+- `AppSection` now has more than 9 cases; the Go menu only assigns ⌘1–⌘9 to the first nine.
+- Tiling hotkeys are registered in `WindowManager.setHotKeysEnabled` via `GlobalHotKey`; move them into the hotkey registry in task 19.
+- Reusable `TextPrompt.ask(title:message:)` (WindowManager.swift) for one-field NSAlert prompts.
 - Add usage strings to `Resources/Info.plist` for any new permission (Reminders strings were added in batch 5).
 
 ## Continuing in a Claude Code cloud session

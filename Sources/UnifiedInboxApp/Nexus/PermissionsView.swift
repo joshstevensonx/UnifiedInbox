@@ -48,7 +48,7 @@ struct PermissionsView: View {
                     state: screenRecording, anchor: "Privacy_ScreenCapture")
                 row("Automation: Music", why: "Now Playing and play/pause/skip for Music.", state: musicAutomation, anchor: "Privacy_Automation")
                 row("Automation: Spotify", why: "Now Playing and play/pause/skip for Spotify.", state: spotifyAutomation, anchor: "Privacy_Automation")
-                row("Accessibility", why: "Not used. Nothing in the app controls other apps' windows or keystrokes yet.",
+                row("Accessibility", why: "Window tiling and restoring workspace window positions. Asked the first time you tile a window.",
                     state: accessibility, anchor: "Privacy_Accessibility")
             } header: {
                 HStack {
@@ -101,7 +101,7 @@ struct PermissionsView: View {
 
     private func refresh() {
         screenRecording = CGPreflightScreenCaptureAccess() ? .granted : .notAsked
-        accessibility = AXIsProcessTrusted() ? .granted : .notNeeded
+        accessibility = AXIsProcessTrusted() ? .granted : .notAsked
         musicAutomation = Self.automation("com.apple.Music")
         spotifyAutomation = Self.automation("com.spotify.client")
         guard Bundle.main.bundleURL.pathExtension == "app" else {

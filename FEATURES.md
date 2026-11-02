@@ -69,7 +69,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 | 11 | Inbox rules engine (sender / keyword / app → archive, pin, label, mute), labels with colours, quiet hours, auto-archive read messages | ✅ |
 | 12 | Saved searches in the sidebar, private notes, "Remind me", Add to Tasks / Apple Reminders, export by date range | ✅ |
 | 13 | Threshold alerts (CPU sustained, memory pressure, low battery, low disk; debounced + cooldown) and 24 h battery / storage history charts | ✅ |
-| 14 | Window tiling + workspaces (Accessibility) | ⬜ |
+| 14 | Window tiling (16 layouts, ⌃⌥ hotkeys, ½→⅓→⅔ cycling, gaps, next display) + workspaces (save / switch apps and window frames, hide others) | ✅ |
 | 15 | Notes: Markdown, [[backlinks]], daily notes | ⬜ |
 | 16 | File tools: large files, Downloads cleanup, duplicates | ⬜ |
 | 17 | Habits + weekly review | ⬜ |
@@ -82,8 +82,8 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 | 24 | Ambient clock, density / accent settings, hot-corner launcher, daily digest | ⬜ |
 
 ## From the feature spec: good next candidates
-- ⬜ Window snapping / tiling layouts (needs Accessibility permission) §6.2
-- ⬜ Workspaces: save/restore running apps + window positions §2.2
+- ✅ Window snapping / tiling layouts (needs Accessibility permission) §6.2
+- ✅ Workspaces: save/restore running apps + window positions §2.2
 - ⬜ Text expansion / snippets (needs Accessibility) §1.4
 - ⬜ Notes with Markdown, backlinks, daily notes §10
 - ⬜ File tools: large-file finder, Downloads cleanup, duplicates §3.3
@@ -95,7 +95,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 
 ## NEXUS: not built yet
 - ⬜ Process manager (P1)
-- ⬜ Workspaces: save / switch layouts (P1)
+- ✅ Workspaces: save / switch layouts (P1)
 - ⬜ Ambient clocks and scenes
 - ✅ Threshold alerts: CPU, memory pressure, low battery, low disk (opt-in, debounced)
 - ⬜ Automation rules

@@ -33,6 +33,7 @@ struct ContentView: View {
         case .apps: AppsView()
         case .clipboard: ClipboardView()
         case .focus: FocusView()
+        case .windows: WindowsView()
         case .inbox: EmptyView()
         }
     }

@@ -206,6 +206,11 @@ struct NexusSettings: View {
                 Text("Samples CPU, memory and network every 2 s while a dashboard, widget or the menu is visible, every 15 s otherwise. Battery about every 30 s, storage about every 60 s. Everything stays on this Mac.")
                     .font(.caption).foregroundStyle(.secondary)
             }
+            Section("Windows") {
+                Toggle("Tiling shortcuts: ⌃⌥ arrows, ⌃⌥↩ maximize, ⌃⌥C center", isOn: $model.tilingHotKeys)
+                Text("Needs Accessibility permission (Settings → Privacy). Another app may already own these keys.")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
             SystemAlertsSection()
             Section("Widgets") {
                 Button(model.widgets.anyVisible ? "Hide All Widgets" : "Show All Widgets") {
