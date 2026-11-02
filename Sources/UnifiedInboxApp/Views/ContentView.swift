@@ -3,6 +3,8 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject private var model: AppModel
+    /// Rebuilds the window when the accent changes (Theme.accent reads it on render).
+    @AppStorage("accentHex") private var accentHex = "#8CB3FF"
 
     var body: some View {
         Group {
@@ -17,6 +19,8 @@ struct ContentView: View {
                 }
             }
         }
+        .id(accentHex)
+        .sheet(isPresented: $model.showDigest) { DigestSheet() }
         .toolbarBackground(.hidden, for: .windowToolbar)
         .background(GlassBackground(material: .underWindowBackground).ignoresSafeArea())
         .preferredColorScheme(.dark)
@@ -39,6 +43,7 @@ struct ContentView: View {
         case .files: FilesView()
         case .automation: AutomationView()
         case .snippets: SnippetsView()
+        case .processes: ProcessesView()
         case .inbox: EmptyView()
         }
     }
@@ -73,6 +78,8 @@ struct ContentView: View {
                 }
                 .help("Export the selected messages (or the whole current view) as CSV, JSON or Markdown")
 
+                Button { model.showDigest = true } label: { Label("Digest", systemImage: "text.badge.star") }
+                    .help("Today's digest: counts, priority messages and who is waiting for a reply")
                 Button { model.markAllRead() } label: { Label("Mark All Read", systemImage: "checkmark") }
                     .help("Mark everything in \(model.filter.title) as read (⇧⌘K)")
                 Button { model.refresh() } label: { Label("Refresh", systemImage: "arrow.clockwise") }

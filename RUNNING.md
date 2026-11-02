@@ -258,6 +258,37 @@ half a second later). Placeholders: `{date}` `{time}` `{datetime}` `{isodate}` `
 `{cursor}` for where the caret should end up. Nothing expands in password fields. Add bundle ids (e.g.
 `com.apple.Terminal`) under "Don't expand in" to switch it off for some apps.
 
+### Processes and logs
+**Processes** page (Nexus section): every process with CPU (share of one core), memory, threads and owner.
+Search by name / PID / path, show only yours, or switch to the tree view. Right-click to quit, force quit
+(confirmed), show its logs, or see totals including child processes. Other users' processes (root) can't be
+inspected or stopped without admin rights. **Logs** reads the system log with `log show` for the last few
+minutes, filtered by level, process, subsystem or text; "This App" shows Unified Inbox's own log.
+
+### Command line and AI assistants (`inboxctl`)
+The built app contains `inboxctl`. **Settings → Privacy → Command line & AI assistants → Copy Install Command**,
+paste it in Terminal, then try:
+```bash
+inboxctl list --filter unread
+```
+```bash
+inboxctl search invoice --platform outlook --json
+```
+```bash
+inboxctl export --format csv --from 2026-10-01 --to 2026-10-31 > october.csv
+```
+`inboxctl help` lists everything. For an AI assistant that supports MCP (e.g. Claude Desktop), "Copy MCP Config"
+and paste it into the assistant's config file; it can then search your inbox locally. It's read-only unless you
+add `--allow-writes` to the args.
+
+### Appearance, hot corner, ambient clock, daily digest
+**Settings → Appearance**: accent colour, message-list density (compact / comfortable / spacious), a **hot corner**
+that opens the launcher (hold the pointer in the corner briefly), the **ambient clock** style, and the **daily
+digest** notification time. Tools → **Ambient Clock** (⌃⌘A) fills the screen with a clock plus unread count, focus
+timer, habits and battery; click or press esc to close. The **Digest** button in the inbox toolbar (or ⌥Space →
+"Daily Digest") shows the day's counts, priority messages and who's waiting for a reply. On macOS 26 with Apple
+Intelligence turned on, "Summarise with Apple Intelligence" adds a short summary written on this Mac.
+
 ## 9. Troubleshooting
 
 | Symptom | Fix |

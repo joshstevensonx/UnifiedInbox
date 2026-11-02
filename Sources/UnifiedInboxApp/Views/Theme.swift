@@ -1,5 +1,6 @@
 import AppKit
 import InboxCore
+import NexusCore
 import SwiftUI
 
 /// Dark glass, minimalist design tokens.
@@ -15,8 +16,12 @@ enum Theme {
     static let fillHover = Color.white.opacity(0.08)
     static let fillSelected = Color.white.opacity(0.12)
 
-    // Single restrained accent; platform colours only appear as small dots.
-    static let accent = Color(red: 0.55, green: 0.70, blue: 1.0)
+    // Single restrained accent (Settings → Appearance); platform colours only appear as small dots.
+    static var accent: Color {
+        let hex = UserDefaults.standard.string(forKey: "accentHex") ?? "#8CB3FF"
+        guard let c = AccentPalette.rgb(hex) else { return Color(red: 0.55, green: 0.70, blue: 1.0) }
+        return Color(red: c.r, green: c.g, blue: c.b)
+    }
     static let priority = Color(red: 1.0, green: 0.80, blue: 0.35)
     static let warning = Color(red: 1.0, green: 0.62, blue: 0.35)
 

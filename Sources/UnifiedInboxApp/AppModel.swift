@@ -8,7 +8,7 @@ import SwiftUI
 
 /// Top-level areas of the app (NEXUS pages + the unified inbox).
 enum AppSection: String, Hashable, CaseIterable {
-    case overview, monitor, launcher, widgets, apps, clipboard, focus, habits, notes, windows, files, automation, snippets, inbox
+    case overview, monitor, launcher, widgets, apps, clipboard, focus, habits, notes, windows, files, automation, snippets, processes, inbox
 
     var title: String {
         switch self {
@@ -25,6 +25,7 @@ enum AppSection: String, Hashable, CaseIterable {
         case .files: return "Files"
         case .automation: return "Automation"
         case .snippets: return "Snippets"
+        case .processes: return "Processes"
         case .inbox: return "Inbox"
         }
     }
@@ -44,6 +45,7 @@ enum AppSection: String, Hashable, CaseIterable {
         case .files: return "externaldrive"
         case .automation: return "bolt"
         case .snippets: return "text.insert"
+        case .processes: return "cpu"
         case .inbox: return "tray"
         }
     }
@@ -142,6 +144,11 @@ final class AppModel: ObservableObject {
     let hotkeys: HotkeyManager
     let automation: AutomationManager
     let snippets: SnippetEngine
+    let processes: ProcessManager
+    private(set) var hotCorner: HotCornerMonitor?
+    private let ambient = AmbientController()
+    private var digestTimer: Timer?
+    @Published var showDigest = false
     private var lockObserver: NSObjectProtocol?
     private var quickLook: QuickLookController?
 
@@ -197,6 +204,7 @@ final class AppModel: ObservableObject {
         hotkeys = HotkeyManager()
         automation = AutomationManager()
         snippets = SnippetEngine()
+        processes = ProcessManager()
         tilingHotKeys = d.object(forKey: Keys.tilingHotKeys) as? Bool ?? true
         launcherHotKey = d.object(forKey: Keys.launcherHotKey) as? Bool ?? true
         section = d.string(forKey: Keys.lastSection).flatMap(AppSection.init(rawValue:)) ?? .overview
@@ -235,6 +243,10 @@ final class AppModel: ObservableObject {
         widgets.attach(model: self)
         registerHotkeys()
         automation.attach(model: self)
+        hotCorner = HotCornerMonitor { [weak self] in self?.showLauncher() }
+        digestTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.checkDigestSchedule() }
+        }
     }
 
     // MARK: Capture
@@ -548,6 +560,8 @@ final class AppModel: ObservableObject {
     func showQuickLook() { quickLook?.toggle() }
 
     func showLauncher() { launcherPanel.toggle() }
+
+    func toggleAmbient() { ambient.toggle(model: self) }
 
     /// Jump to an inbox view from anywhere (overview cards, widgets, menu bar).
     func selectInbox(_ filter: InboxFilter) {

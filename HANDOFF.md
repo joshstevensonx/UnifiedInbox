@@ -13,7 +13,7 @@ Design: dark glass, minimal (`Views/Theme.swift`). App icon from `scripts/make_i
 ```bash
 cd ~/Desktop/DEV/UnifiedInbox
 ./scripts/build-app.sh          # → dist/UnifiedInbox.app (universal, ad-hoc signed, icon bundled)
-swift test                      # core unit tests (47 at handoff, all passing on Linux toolchain)
+swift test                      # core unit tests (108, all passing on the Linux toolchain)
 open Package.swift              # Xcode
 ```
 On Linux (cloud sandbox) the app target can't build. Only `InboxCore` and `NexusCore` with tests can, using stub symbols for GRDB's SQLite snapshot API. The SwiftUI files are only syntax-checked (`swiftc -parse`). **Always ask the user to run `./scripts/build-app.sh` and paste `error:` lines.**
@@ -21,7 +21,17 @@ On Linux (cloud sandbox) the app target can't build. Only `InboxCore` and `Nexus
 ### Build status at handoff
 - Last confirmed good Mac build: the NEXUS merge (batch 3).
 - Batch 4 build failed on one error (async `openApplication` in `AppsManager.restart`), now fixed. Not yet re-confirmed.
-- Batch 5 (below) has **not been built on a Mac yet**. Expect a few compile errors; fix them first.
+- Batch 5 (tasks 11–24) has **not been built on a Mac yet**. Everything in `Sources/UnifiedInboxApp` was only
+  syntax-checked on Linux (`swiftc -parse`), so expect some type-check errors. **Next step: run
+  `./scripts/build-app.sh` on the Mac and fix the `error:` lines first.**
+- Built and run on Linux: `InboxCore`, `NexusCore` (108 tests) and the `inboxctl` executable (CLI + MCP smoke-tested).
+- Mac-only code paths most likely to need fixes: libproc structs (`ProcessManager.snapshot`), AX calls
+  (`WindowManager`), CommonCrypto PBKDF2 (`BackupCrypto.deriveKey`, test `BackupTests.testEncryptDecrypt` only
+  runs on macOS), FoundationModels (`OnDeviceSummary`), CGEvent posting (`SnippetEngine`), Carbon
+  `IsSecureEventInputEnabled`, NSEvent monitors used from `@MainActor` closures.
+- Needs manual testing on a Mac: Accessibility (tiling, workspaces, snippets), Touch ID lock, backup → restore →
+  restart, hotkey recording, hot corner, ambient clock, Files folder prompts, Logs tab (`log show` may ask for an
+  admin user), `inboxctl` inside the built .app.
 
 ### Gotchas already hit (avoid repeating)
 - Don't read `self` properties in `init` before every stored property is set. Use locals (see `AppModel.init`).
@@ -39,13 +49,19 @@ Sources/InboxCore/            Models, Storage (InboxStore SQLite+FTS5, exporter)
                               Rules (AlertRules, SnoozeOption, InboxGrouping/DayBucket, InboxRules: RuleSet/QuietHours/SavedSearch)
 Sources/NexusCore/            Monitoring (Metrics, SystemSampler [macOS], Thresholds), Launcher, Widgets,
                               Productivity (Clipboard, Palette/aliases, Usage, Focus: Pomodoro + TodoItem)
+Sources/InboxCore/CLI/        inboxctl commands + MCP server (tested); Rules/DailyDigest
+Sources/NexusCore/            + Windows (tiling/workspaces), Files, Security (backup/lock policy), Hotkeys, Automation,
+                              Productivity (Notes, Habits, Snippets), Monitoring (Thresholds, Processes/logs), Widgets/HotCorner
+Sources/inboxctl/             thin executable (CLI + `inboxctl mcp`), copied into the .app by build-app.sh
 Sources/UnifiedInboxApp/      AppModel (hub), UnifiedInboxApp (scenes/menus), Views/, Nexus/ (feature models + views)
 Tests/                        InboxCoreTests, NexusCoreTests
 Resources/                    Info.plist (usage strings), AppIcon.icns/png
 docs/                         NEXUS_Product_Documentation.md, App_Feature_Spec.md (source specs)
 SPEC.md RUNNING.md FEATURES.md HANDOFF.md
 ```
-Local data: `~/Library/Application Support/UnifiedInbox/` (inbox.sqlite + launcher/aliases/widgets/clipboard/usage/tasks/rules .json).
+Local data: `~/Library/Application Support/UnifiedInbox/` (inbox.sqlite + launcher/aliases/widgets/clipboard/usage/tasks/rules/
+workspaces/habits/hotkeys/automation/snippets/metric-history .json, Notes/*.md).
+Restore staging: `UnifiedInbox.restore/` (swapped in at launch), previous data kept in `UnifiedInbox.before-restore/`.
 
 ## User's instruction for the current batch
 > "Do everything that doesn't require account setup or payment."
@@ -66,10 +82,10 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 | 19 | Hotkey manager with rebinding (central registry over `GlobalHotKey`) | ✅ `NexusCore/Hotkeys/Hotkeys.swift` (+`HotkeyTests`), `Nexus/HotkeyManager.swift`, Settings → Shortcuts |
 | 20 | Automation rules (triggers → actions, cooldown, run log) | ✅ `NexusCore/Automation/Automation.swift` (+`AutomationTests`), `Nexus/AutomationManager.swift`, Automation page; `AppModel.handleNew` calls `automation.newMessages` |
 | 21 | Text snippet expansion (event tap, Accessibility) | ✅ `NexusCore/Productivity/Snippets.swift` (+`SnippetTests`), `Nexus/SnippetEngine.swift` (NSEvent global monitor, not a CGEventTap), Snippets page |
-| 22 | Process manager (libproc, all processes) + log viewer | ⬜ |
-| 23 | `inboxctl` CLI + stdio MCP server over the local DB | ⬜ |
-| 24 | Ambient clock, density/accent settings, hot-corner launcher, daily digest (FoundationModels if available) | ⬜ |
-| 25 | Verify, update FEATURES/RUNNING, sync | ⬜ |
+| 22 | Process manager (libproc, all processes) + log viewer | ✅ `NexusCore/Monitoring/Processes.swift` (+`ProcessTests`), `Nexus/ProcessManager.swift`, Processes page (Nexus section) |
+| 23 | `inboxctl` CLI + stdio MCP server over the local DB | ✅ `InboxCore/CLI/InboxCLI.swift`, `InboxCore/CLI/MCPServer.swift` (+`CLITests`), thin `Sources/inboxctl/main.swift`; build-app.sh copies it into Contents/MacOS. Builds and runs on Linux too |
+| 24 | Ambient clock, density/accent settings, hot-corner launcher, daily digest (FoundationModels if available) | ✅ `NexusCore/Widgets/HotCorner.swift` (+`HotCornerTests`), `InboxCore/Rules/DailyDigest.swift` (+`DigestTests`), `Nexus/Ambient.swift`, Settings → Appearance |
+| 25 | Verify, update FEATURES/RUNNING, sync | 🚧 docs updated, Linux tests green; **Mac build + manual checks pending** |
 
 ### Notes for later tasks
 - Automation: new event sources go through `AutomationManager.handle(_:)`; new actions need a case in `AutomationAction`, `perform`, the editor menu and `ActionFields`.
@@ -81,6 +97,8 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 - `AppSection` now has more than 9 cases; the Go menu only assigns ⌘1–⌘9 to the first nine.
 - App lock: `AppLock.shared` (MainActor). Gate new panels with `AppLock.shared.whenUnlocked { … }` and close them on `.appDidLock`. Floating widgets (incl. the Inbox widget) are not hidden while locked yet.
 - Restore is staged in `UnifiedInbox.restore/` and swapped in at the top of `AppModel.init` (`BackupService.applyPendingRestore`); the previous data goes to `UnifiedInbox.before-restore/`.
+- `Theme.accent` is now computed from UserDefaults `accentHex`; `ContentView` uses `.id(accentHex)` to redraw. Other windows (menu bar, panels) pick up a new accent the next time they render.
+- FoundationModels is behind `#if canImport(FoundationModels)` + `#available(macOS 26.0, *)` (`OnDeviceSummary`), so older SDKs still build.
 - Reusable `TextPrompt.ask(title:message:)` (WindowManager.swift) for one-field NSAlert prompts.
 - Add usage strings to `Resources/Info.plist` for any new permission (Reminders strings were added in batch 5).
 

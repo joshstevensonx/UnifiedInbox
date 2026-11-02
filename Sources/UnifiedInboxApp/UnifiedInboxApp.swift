@@ -27,6 +27,7 @@ struct UnifiedInboxApp: App {
                 .environmentObject(model.hotkeys)
                 .environmentObject(model.automation)
                 .environmentObject(model.snippets)
+                .environmentObject(model.processes)
                 .lockable()
                 .environmentObject(model.lock)
                 .frame(minWidth: 820, minHeight: 500)
@@ -69,6 +70,10 @@ struct UnifiedInboxApp: App {
                     if model.focus.timer.phase == .idle { model.focus.start() } else { model.focus.stop() }
                 }
                 .keyboardShortcut("f", modifiers: [.command, .shift])
+                Divider()
+                Button("Ambient Clock") { model.toggleAmbient() }
+                    .keyboardShortcut("a", modifiers: [.command, .control])
+                Button("Daily Digest") { model.showDigest = true; model.openInbox() }
                 Divider()
                 Button("Play / Pause Music") { model.media.playPause() }
                 Button("Next Track") { model.media.next() }

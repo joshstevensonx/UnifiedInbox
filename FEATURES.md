@@ -77,9 +77,9 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 | 19 | Hotkey manager: one registry for all global shortcuts, record / clear / reset per action, conflict and "owned by another app" warnings, extra assignable actions (today's note, focus, screenshot, OCR, lock, play/pause, every tile layout) | ✅ |
 | 20 | Automation: triggers (new message with filters, app opens / quits, time of day + weekdays, battery low, CPU high, focus start / end) → actions (notify, open / quit / hide app, URL, workspace, focus, Shortcuts, sound, copy, task, daily note, privacy mode, palette command) with {placeholders}, cooldown, loop guard, Run Now, run log | ✅ |
 | 21 | Text snippets: abbreviation → expansion in any app (global key monitor + paste, clipboard restored, transient so clipboard history skips it), {date} {time} {clipboard} {cursor}…, word-boundary matching, overlap warnings, excluded apps, never in password fields | ✅ |
-| 22 | Process manager (all processes) + log viewer | ⬜ |
-| 23 | `inboxctl` CLI + stdio MCP server over the local DB | ⬜ |
-| 24 | Ambient clock, density / accent settings, hot-corner launcher, daily digest | ⬜ |
+| 22 | Process manager: every process via libproc (CPU, memory, threads, user), search, only-mine, tree view with child totals, quit / force quit with confirmation · Log viewer over `log show` (time window, level, process, subsystem, text; export) | ✅ |
+| 23 | `inboxctl` CLI (list / search / show / stats / export / read / archive / pin, text or JSON) + stdio MCP server (search, list, get, date range, stats; writes only with --allow-writes), bundled in the .app, copy-install and MCP config in Settings → Privacy | ✅ |
+| 24 | Ambient clock (digital / analog, live inbox / focus / habits / battery, anti burn-in drift), accent colour + list density (Settings → Appearance), hot-corner launcher, daily digest (extractive, Apple Intelligence summary on macOS 26 when available, daily notification, save as note) | ✅ |
 
 ## From the feature spec: good next candidates
 - ✅ Window snapping / tiling layouts (needs Accessibility permission) §6.2
@@ -94,12 +94,12 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 - ⬜ Not planned: private-API features (MediaRemote, fan/temperature via SMC, /etc/hosts blocking)
 
 ## NEXUS: not built yet
-- ⬜ Process manager (P1)
+- ✅ Process manager (P1)
 - ✅ Workspaces: save / switch layouts (P1)
-- ⬜ Ambient clocks and scenes
+- ✅ Ambient clock (digital / analog)
 - ✅ Threshold alerts: CPU, memory pressure, low battery, low disk (opt-in, debounced)
 - ✅ Automation rules
-- ⬜ Launcher edge / hot-corner reveal (task 24); ✅ configurable hotkeys
+- ✅ Launcher hot-corner reveal; ✅ configurable hotkeys
 - ✅ Battery and storage history charts (24 h)
 
 ## Up next (batch 4)
@@ -122,7 +122,7 @@ The complete fix is per platform:
 - ⬜ Noise detection: learn threads you always archive unread (M)
 
 ## On-device AI (private)
-- ⬜ Daily / hourly digest (M)
+- ✅ Daily digest (M); hourly ⬜
 - ⬜ Priority scoring from sender, keywords, wording (M–L)
 - ⬜ Thread summaries (M)
 - ⬜ Draft replies to copy into the source app (L)
@@ -150,7 +150,7 @@ The complete fix is per platform:
 
 ## UI / UX
 - ⬜ Desktop & Notification Center widgets (M)
-- ⬜ Compact / comfortable density, themes (S)
+- ✅ Compact / comfortable / spacious density, accent colours (S)
 - ⬜ Contact avatars, per-app accent colours (M)
 - ✅ Menu-bar stats text (S)
 - ⬜ Shortcuts app actions (App Intents) (M)
@@ -158,8 +158,8 @@ The complete fix is per platform:
 
 ## Data & integration
 - ✅ Export CSV / JSON / Markdown (by date range / client: ⬜)
-- ⬜ Local CLI / API (M)
-- ⬜ MCP server so AI assistants can query the inbox locally (M)
+- ✅ Local CLI / API (M)
+- ✅ MCP server so AI assistants can query the inbox locally (M)
 - ✅ Encrypted backup & restore (S)
 - ⬜ End-to-end encrypted sync between Macs (L)
 - ⬜ Per-client message counts for billing (M)
@@ -170,4 +170,4 @@ The complete fix is per platform:
 - ✅ Privacy mode: mask previews in menu bar / quick look / banners (widgets: ⬜)
 - ⬜ Capture self-healing after macOS updates (M)
 - ⬜ Sparkle auto-updates + notarized DMG (M)
-- ⬜ Local log viewer (S)
+- ✅ Local log viewer (S)

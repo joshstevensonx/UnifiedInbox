@@ -13,6 +13,8 @@ public final class InboxStore: @unchecked Sendable {
     public init(path: String?) throws {
         var config = Configuration()
         config.foreignKeysEnabled = true
+        // The app and `inboxctl` can use the database at the same time: wait for a lock instead of failing.
+        config.busyMode = .timeout(5)
         if let path {
             try FileManager.default.createDirectory(
                 at: URL(fileURLWithPath: path).deletingLastPathComponent(),
@@ -268,6 +270,10 @@ public final class InboxStore: @unchecked Sendable {
     }
 
     // MARK: - Reads
+
+    public func item(id: String) throws -> InboxItem? {
+        try dbQueue.read { db in try InboxItem.fetchOne(db, key: id) }
+    }
 
     public func fetch(filter: InboxFilter, search: String? = nil, limit: Int = 500) throws -> [InboxItem] {
         try dbQueue.read { db in try Self.fetch(db, filter: filter, search: search, limit: limit) }
