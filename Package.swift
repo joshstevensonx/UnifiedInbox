@@ -6,6 +6,7 @@ let package = Package(
     platforms: [.macOS(.v13)],
     products: [
         .executable(name: "UnifiedInbox", targets: ["UnifiedInboxApp"]),
+        .executable(name: "inboxctl", targets: ["inboxctl"]),
         .library(name: "InboxCore", targets: ["InboxCore"]),
         .library(name: "NexusCore", targets: ["NexusCore"]),
     ],
@@ -26,6 +27,8 @@ let package = Package(
             name: "UnifiedInboxApp",
             dependencies: ["InboxCore", "NexusCore"]
         ),
+        // Command-line tool + MCP server over the local database (bundled into the .app).
+        .executableTarget(name: "inboxctl", dependencies: ["InboxCore"]),
         .testTarget(
             name: "InboxCoreTests",
             dependencies: ["InboxCore"]

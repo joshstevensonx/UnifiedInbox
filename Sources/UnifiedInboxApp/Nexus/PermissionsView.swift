@@ -72,6 +72,7 @@ struct PermissionsView: View {
                 Text("Messages (SQLite), launcher, widgets, clipboard, screen time and tasks are separate local files. Delete the folder to reset everything.")
                     .font(.caption).foregroundStyle(.secondary)
             }
+            CommandLineSection()
         }
         .formStyle(.grouped)
         .onAppear(perform: refresh)
@@ -132,5 +133,57 @@ struct PermissionsView: View {
         case OSStatus(errAEEventWouldRequireUserConsent): return .notAsked
         default: return .unknown
         }
+    }
+}
+
+/// `inboxctl` and the MCP server: read the inbox from Terminal or a local AI assistant.
+struct CommandLineSection: View {
+    @State private var copied: String?
+
+    private var toolPath: String {
+        Bundle.main.bundleURL.appendingPathComponent("Contents/MacOS/inboxctl").path
+    }
+
+    private var installCommand: String {
+        "mkdir -p ~/.local/bin && ln -sf \"\(toolPath)\" ~/.local/bin/inboxctl"
+    }
+
+    private var mcpConfig: String {
+        """
+        {
+          "mcpServers": {
+            "unified-inbox": { "command": "\(toolPath)", "args": ["mcp"] }
+          }
+        }
+        """
+    }
+
+    var body: some View {
+        Section {
+            LabeledContent("Tool") {
+                Text(toolPath).font(.system(.caption, design: .monospaced)).foregroundStyle(.secondary).textSelection(.enabled)
+            }
+            HStack {
+                Button("Copy Install Command") { copy(installCommand, "install") }
+                    .help("Links inboxctl into ~/.local/bin (add it to your PATH if needed)")
+                Button("Copy MCP Config") { copy(mcpConfig, "mcp") }
+                    .help("For an MCP client's config file, e.g. Claude Desktop's claude_desktop_config.json")
+                if let copied { Text("Copied \(copied == "mcp" ? "MCP config" : "command")").font(.caption).foregroundStyle(.secondary) }
+            }
+            if !FileManager.default.isExecutableFile(atPath: toolPath) {
+                Text("Not found in this build. Build with ./scripts/build-app.sh to include it.").font(.caption).foregroundStyle(.orange)
+            }
+        } header: {
+            Text("Command line & AI assistants")
+        } footer: {
+            Text("inboxctl lists, searches and exports messages from the local database (inboxctl help). \"inboxctl mcp\" lets a local AI assistant search your inbox over stdin/stdout: read-only unless you add --allow-writes. Nothing is sent anywhere by the app; what the assistant does with results depends on that assistant.")
+                .font(.caption).foregroundStyle(.secondary)
+        }
+    }
+
+    private func copy(_ text: String, _ what: String) {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+        copied = what
     }
 }

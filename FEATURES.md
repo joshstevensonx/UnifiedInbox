@@ -78,7 +78,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 | 20 | Automation: triggers (new message with filters, app opens / quits, time of day + weekdays, battery low, CPU high, focus start / end) → actions (notify, open / quit / hide app, URL, workspace, focus, Shortcuts, sound, copy, task, daily note, privacy mode, palette command) with {placeholders}, cooldown, loop guard, Run Now, run log | ✅ |
 | 21 | Text snippets: abbreviation → expansion in any app (global key monitor + paste, clipboard restored, transient so clipboard history skips it), {date} {time} {clipboard} {cursor}…, word-boundary matching, overlap warnings, excluded apps, never in password fields | ✅ |
 | 22 | Process manager: every process via libproc (CPU, memory, threads, user), search, only-mine, tree view with child totals, quit / force quit with confirmation · Log viewer over `log show` (time window, level, process, subsystem, text; export) | ✅ |
-| 23 | `inboxctl` CLI + stdio MCP server over the local DB | ⬜ |
+| 23 | `inboxctl` CLI (list / search / show / stats / export / read / archive / pin, text or JSON) + stdio MCP server (search, list, get, date range, stats; writes only with --allow-writes), bundled in the .app, copy-install and MCP config in Settings → Privacy | ✅ |
 | 24 | Ambient clock, density / accent settings, hot-corner launcher, daily digest | ⬜ |
 
 ## From the feature spec: good next candidates
@@ -158,8 +158,8 @@ The complete fix is per platform:
 
 ## Data & integration
 - ✅ Export CSV / JSON / Markdown (by date range / client: ⬜)
-- ⬜ Local CLI / API (M)
-- ⬜ MCP server so AI assistants can query the inbox locally (M)
+- ✅ Local CLI / API (M)
+- ✅ MCP server so AI assistants can query the inbox locally (M)
 - ✅ Encrypted backup & restore (S)
 - ⬜ End-to-end encrypted sync between Macs (L)
 - ⬜ Per-client message counts for billing (M)

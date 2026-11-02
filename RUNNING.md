@@ -265,6 +265,22 @@ Search by name / PID / path, show only yours, or switch to the tree view. Right-
 inspected or stopped without admin rights. **Logs** reads the system log with `log show` for the last few
 minutes, filtered by level, process, subsystem or text; "This App" shows Unified Inbox's own log.
 
+### Command line and AI assistants (`inboxctl`)
+The built app contains `inboxctl`. **Settings → Privacy → Command line & AI assistants → Copy Install Command**,
+paste it in Terminal, then try:
+```bash
+inboxctl list --filter unread
+```
+```bash
+inboxctl search invoice --platform outlook --json
+```
+```bash
+inboxctl export --format csv --from 2026-10-01 --to 2026-10-31 > october.csv
+```
+`inboxctl help` lists everything. For an AI assistant that supports MCP (e.g. Claude Desktop), "Copy MCP Config"
+and paste it into the assistant's config file; it can then search your inbox locally. It's read-only unless you
+add `--allow-writes` to the args.
+
 ## 9. Troubleshooting
 
 | Symptom | Fix |

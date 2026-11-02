@@ -8,12 +8,15 @@ CONFIG=release
 [[ "${1:-}" == "--debug" ]] && CONFIG=debug
 
 swift build -c "$CONFIG" --arch arm64 --arch x86_64 --product UnifiedInbox
+swift build -c "$CONFIG" --arch arm64 --arch x86_64 --product inboxctl
 BIN="$(swift build -c "$CONFIG" --arch arm64 --arch x86_64 --show-bin-path)/UnifiedInbox"
 
 APP=dist/UnifiedInbox.app
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/UnifiedInbox"
+# Command-line tool / MCP server (Settings → Privacy → Command line & AI assistants)
+cp "$(dirname "$BIN")/inboxctl" "$APP/Contents/MacOS/inboxctl"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
 # App icon (regenerate with: python3 scripts/make_icon.py)
 [[ -f Resources/AppIcon.icns ]] && cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
