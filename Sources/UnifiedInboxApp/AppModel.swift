@@ -8,7 +8,7 @@ import SwiftUI
 
 /// Top-level areas of the app (NEXUS pages + the unified inbox).
 enum AppSection: String, Hashable, CaseIterable {
-    case overview, monitor, launcher, widgets, apps, clipboard, focus, notes, windows, inbox
+    case overview, monitor, launcher, widgets, apps, clipboard, focus, notes, windows, files, inbox
 
     var title: String {
         switch self {
@@ -21,6 +21,7 @@ enum AppSection: String, Hashable, CaseIterable {
         case .focus: return "Focus"
         case .notes: return "Notes"
         case .windows: return "Windows"
+        case .files: return "Files"
         case .inbox: return "Inbox"
         }
     }
@@ -36,6 +37,7 @@ enum AppSection: String, Hashable, CaseIterable {
         case .focus: return "timer"
         case .notes: return "note.text"
         case .windows: return "rectangle.split.2x1"
+        case .files: return "externaldrive"
         case .inbox: return "tray"
         }
     }
@@ -121,6 +123,7 @@ final class AppModel: ObservableObject {
     let focus: FocusModel
     let windows: WindowManager
     let notes: NotesModel
+    let files: FileToolsModel
     private var quickLook: QuickLookController?
 
     let store: InboxStore?
@@ -167,6 +170,7 @@ final class AppModel: ObservableObject {
         focus = FocusModel()
         windows = WindowManager()
         notes = NotesModel()
+        files = FileToolsModel()
         tilingHotKeys = d.object(forKey: Keys.tilingHotKeys) as? Bool ?? true
         launcherHotKey = d.object(forKey: Keys.launcherHotKey) as? Bool ?? true
         section = d.string(forKey: Keys.lastSection).flatMap(AppSection.init(rawValue:)) ?? .overview

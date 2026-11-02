@@ -33,7 +33,7 @@ struct SidebarView: View {
             }
 
             Section {
-                ForEach([AppSection.focus, .notes, .windows, .apps, .clipboard], id: \.self) { page in
+                ForEach([AppSection.focus, .notes, .windows, .files, .apps, .clipboard], id: \.self) { page in
                     pageRow(page)
                 }
             } header: {
@@ -150,6 +150,7 @@ struct SidebarView: View {
         case .clipboard: return "Clipboard history: search, pin and copy back (⌃⌥V from anywhere)"
         case .focus: return "Tasks and Pomodoro focus timer"
         case .notes: return "Markdown notes with [[links]], backlinks and daily notes"
+        case .files: return "Find large files and duplicates, clean up Downloads"
         case .windows: return "Tile windows (⌃⌥ arrows) and save / switch workspaces"
         case .inbox: return "Unified inbox"
         }

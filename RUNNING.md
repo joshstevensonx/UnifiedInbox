@@ -218,6 +218,12 @@ permission; remove and re-add the app if tiling stops working.
 Renaming a note (edit the title, press ↩) updates links everywhere. The calendar button opens today's daily note.
 Search with `#tag` to filter by tag. Right-click a message → "Add to Today's Note".
 
+### Files
+**Files** page (Tools): **Large Files** (pick a folder and a minimum size), **Downloads** (grouped by type, with
+suggestions: installers/archives older than a week, anything else older than 90 days) and **Duplicates**
+(byte-for-byte identical files; select all but the oldest or newest copy). Selected items go to the **Trash**
+after you confirm, so they can be restored. macOS asks once before the app reads Desktop, Documents or Downloads.
+
 ## 9. Troubleshooting
 
 | Symptom | Fix |

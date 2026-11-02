@@ -71,7 +71,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 | 13 | Threshold alerts (CPU sustained, memory pressure, low battery, low disk; debounced + cooldown) and 24 h battery / storage history charts | ✅ |
 | 14 | Window tiling (16 layouts, ⌃⌥ hotkeys, ½→⅓→⅔ cycling, gaps, next display) + workspaces (save / switch apps and window frames, hide others) | ✅ |
 | 15 | Notes: plain `.md` files, Markdown preview with clickable tasks, [[links]] (click to open / create), backlinks + unlinked mentions, rename updates links, #tags, daily notes, "Add to Note" from a message | ✅ |
-| 16 | File tools: large files, Downloads cleanup, duplicates | ⬜ |
+| 16 | File tools: large-file finder (size threshold, skips Library/.git/node_modules), Downloads cleanup by category with age-based suggestions, byte-exact duplicate finder (keep oldest/newest), Move to Trash with confirmation | ✅ |
 | 17 | Habits + weekly review | ⬜ |
 | 18 | Touch ID app lock + AES-GCM encrypted backup / restore | ⬜ |
 | 19 | Hotkey manager with rebinding | ⬜ |
@@ -86,7 +86,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 - ✅ Workspaces: save/restore running apps + window positions §2.2
 - ⬜ Text expansion / snippets (needs Accessibility) §1.4
 - ✅ Notes with Markdown, backlinks, daily notes §10
-- ⬜ File tools: large-file finder, Downloads cleanup, duplicates §3.3
+- ✅ File tools: large-file finder, Downloads cleanup, duplicates §3.3
 - ✅ Threshold alerts: CPU, memory pressure, low battery, low disk §4.4 (batch 5)
 - ⬜ Habit tracker + weekly review §11.3–11.4
 - ⬜ Hotkey manager with rebinding §8.1
