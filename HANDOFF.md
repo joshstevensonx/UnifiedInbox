@@ -85,7 +85,13 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 - Accessibility-based features (tiling, snippets) must check `AXIsProcessTrusted()` and guide the user. Update `PermissionsView` Accessibility row text ("Not used") when they ship.
 - Add usage strings to `Resources/Info.plist` for any new permission (Reminders strings were added in batch 5).
 
-## Working method used so far
+## Continuing in a Claude Code cloud session
+1. On the Mac, push the folder to a private GitHub repo (commands in the chat that created this file, or: `git init && git add -A && git commit -m "Unified Inbox + NEXUS" && gh repo create unifiedinbox --private --source . --push`).
+2. Start a session at claude.ai/code on that repo. `CLAUDE.md` is read automatically and points here.
+3. Verify with `./scripts/linux-test.sh` (Linux: syntax check + 47 core tests). The macOS build still happens on the Mac: `git pull && ./scripts/build-app.sh`.
+4. Commit work in small batches with clear messages so the Mac can pull and build after each one.
+
+## Working method used so far (Cowork session)
 - Cloud workspace copy: `/mnt/user-data/outputs/UnifiedInbox` (mirror of the Mac folder). Edit there, run `swift test` / `swiftc -parse`, then `device_commit_files` to the Mac and compare md5 checksums. Edits made directly on the Mac must be staged back to the cloud copy.
 - README.md and RUNNING.md were last edited on the Mac directly. Don't overwrite them from the cloud copy without staging first.
 - Keep the progress sidebar (TaskCreate/TaskUpdate) and an in-chat progress bar updated. The user asked for this.
