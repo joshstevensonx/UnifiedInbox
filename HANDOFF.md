@@ -61,7 +61,7 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 | 14 | Window tiling + workspaces (Accessibility) | ✅ `NexusCore/Windows/Tiling.swift` (+`TilingTests`), `Nexus/WindowManager.swift`, Windows page, palette commands |
 | 15 | Notes: Markdown, [[backlinks]], daily notes | ✅ `NexusCore/Productivity/Notes.swift` (+`NotesTests`), `Nexus/NotesModel.swift`, Notes page |
 | 16 | File tools: large files, Downloads cleanup, duplicates | ✅ `NexusCore/Files/FileTools.swift` (+`FileToolsTests`), `Nexus/FileToolsModel.swift`, Files page; folder usage strings in Info.plist |
-| 17 | Habits + weekly review | ⬜ |
+| 17 | Habits + weekly review | ✅ `NexusCore/Productivity/Habits.swift` (+`HabitsTests`), `Nexus/HabitsModel.swift`, Habits page |
 | 18 | Touch ID app lock + AES-GCM encrypted backup/restore | ⬜ |
 | 19 | Hotkey manager with rebinding (central registry over `GlobalHotKey`) | ⬜ |
 | 20 | Automation rules (triggers → actions, cooldown, run log) | ⬜ |

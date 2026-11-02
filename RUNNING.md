@@ -224,6 +224,12 @@ suggestions: installers/archives older than a week, anything else older than 90 
 (byte-for-byte identical files; select all but the oldest or newest copy). Selected items go to the **Trash**
 after you confirm, so they can be restored. macOS asks once before the app reads Desktop, Documents or Downloads.
 
+### Habits and weekly review
+**Habits** page (Tools). Add a habit (every day, certain weekdays, or N times a week, with an optional daily
+reminder), then tick the circles for the last 7 days. 🔥 is the current streak; the percentage is the last 30 days.
+**Weekly Review** sums up the week: tasks done, focus minutes per day, habits, screen time and messages received.
+Write a reflection and "Save as Note" to keep it in Notes. ⌥Space: type `done` to tick today's habits.
+
 ## 9. Troubleshooting
 
 | Symptom | Fix |

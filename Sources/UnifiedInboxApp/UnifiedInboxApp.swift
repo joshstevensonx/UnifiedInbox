@@ -23,6 +23,7 @@ struct UnifiedInboxApp: App {
                 .environmentObject(model.windows)
                 .environmentObject(model.notes)
                 .environmentObject(model.files)
+                .environmentObject(model.habits)
                 .frame(minWidth: 820, minHeight: 500)
         }
         .commands {
