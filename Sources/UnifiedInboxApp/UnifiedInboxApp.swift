@@ -24,6 +24,8 @@ struct UnifiedInboxApp: App {
                 .environmentObject(model.notes)
                 .environmentObject(model.files)
                 .environmentObject(model.habits)
+                .lockable()
+                .environmentObject(model.lock)
                 .frame(minWidth: 820, minHeight: 500)
         }
         .commands {
@@ -82,6 +84,8 @@ struct UnifiedInboxApp: App {
                 .environmentObject(model.monitor)
                 .environmentObject(model.media)
                 .environmentObject(model.focus)
+                .lockable()
+                .environmentObject(model.lock)
         } label: {
             MenuBarLabel().environmentObject(model).environmentObject(model.focus)
         }
@@ -94,6 +98,8 @@ struct UnifiedInboxApp: App {
                 .environmentObject(model.monitor)
                 .environmentObject(model.launcher)
                 .environmentObject(model.clipboard)
+                .environmentObject(model.lock)
+                .environmentObject(model.windows)
         }
     }
 }

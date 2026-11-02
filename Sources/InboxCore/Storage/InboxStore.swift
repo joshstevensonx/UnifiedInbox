@@ -25,6 +25,15 @@ public final class InboxStore: @unchecked Sendable {
         try Self.migrator.migrate(dbQueue)
     }
 
+    /// Consistent copy of the whole database into a new file at `path` (SQLite online backup API),
+    /// safe while capture keeps writing. Used by encrypted backups.
+    public func backup(toPath path: String) throws {
+        try? FileManager.default.removeItem(atPath: path)
+        let destination = try DatabaseQueue(path: path)
+        try dbQueue.backup(to: destination)
+        try destination.close()
+    }
+
     /// Default location: ~/Library/Application Support/UnifiedInbox/inbox.sqlite
     public static func defaultPath() -> String {
         let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first

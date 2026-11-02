@@ -62,7 +62,7 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 | 15 | Notes: Markdown, [[backlinks]], daily notes | ✅ `NexusCore/Productivity/Notes.swift` (+`NotesTests`), `Nexus/NotesModel.swift`, Notes page |
 | 16 | File tools: large files, Downloads cleanup, duplicates | ✅ `NexusCore/Files/FileTools.swift` (+`FileToolsTests`), `Nexus/FileToolsModel.swift`, Files page; folder usage strings in Info.plist |
 | 17 | Habits + weekly review | ✅ `NexusCore/Productivity/Habits.swift` (+`HabitsTests`), `Nexus/HabitsModel.swift`, Habits page |
-| 18 | Touch ID app lock + AES-GCM encrypted backup/restore | ⬜ |
+| 18 | Touch ID app lock + AES-GCM encrypted backup/restore | ✅ `NexusCore/Security/Backup.swift` (+`BackupTests`; encryption test runs on Mac only), `InboxStore.backup(toPath:)` (+`BackupStoreTests`), `Nexus/Security.swift`, Settings → Security |
 | 19 | Hotkey manager with rebinding (central registry over `GlobalHotKey`) | ⬜ |
 | 20 | Automation rules (triggers → actions, cooldown, run log) | ⬜ |
 | 21 | Text snippet expansion (event tap, Accessibility) | ⬜ |
@@ -79,6 +79,8 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 - Accessibility-based features must check trust via `AX.isTrusted()` (WindowManager.swift) and guide the user. The `PermissionsView` Accessibility row lists what uses it; add snippets (task 21) there.
 - `AppSection` now has more than 9 cases; the Go menu only assigns ⌘1–⌘9 to the first nine.
 - Tiling hotkeys are registered in `WindowManager.setHotKeysEnabled` via `GlobalHotKey`; move them into the hotkey registry in task 19.
+- App lock: `AppLock.shared` (MainActor). Gate new panels with `AppLock.shared.whenUnlocked { … }` and close them on `.appDidLock`. Floating widgets (incl. the Inbox widget) are not hidden while locked yet.
+- Restore is staged in `UnifiedInbox.restore/` and swapped in at the top of `AppModel.init` (`BackupService.applyPendingRestore`); the previous data goes to `UnifiedInbox.before-restore/`.
 - Reusable `TextPrompt.ask(title:message:)` (WindowManager.swift) for one-field NSAlert prompts.
 - Add usage strings to `Resources/Info.plist` for any new permission (Reminders strings were added in batch 5).
 

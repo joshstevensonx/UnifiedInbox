@@ -125,6 +125,7 @@ final class ClipboardManager: ObservableObject {
 
     func togglePanel() {
         if let panel, panel.isVisible { closePanel(); return }
+        if AppLock.shared.isLocked { AppLock.shared.unlock { [weak self] in self?.togglePanel() }; return }
         query = ""; kindFilter = nil; selection = 0
         let panel = self.panel ?? makePanel()
         self.panel = panel

@@ -73,7 +73,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 | 15 | Notes: plain `.md` files, Markdown preview with clickable tasks, [[links]] (click to open / create), backlinks + unlinked mentions, rename updates links, #tags, daily notes, "Add to Note" from a message | ✅ |
 | 16 | File tools: large-file finder (size threshold, skips Library/.git/node_modules), Downloads cleanup by category with age-based suggestions, byte-exact duplicate finder (keep oldest/newest), Move to Trash with confirmation | ✅ |
 | 17 | Habits (daily / weekdays / N× per week, 7-day grid, streaks, 30-day rate, daily reminder) + weekly review (tasks, focus chart, habits, screen time, messages, reflection, save as note) | ✅ |
-| 18 | Touch ID app lock + AES-GCM encrypted backup / restore | ⬜ |
+| 18 | App lock (Touch ID or Mac password; after N min away, on sleep, on screen lock; covers window, menu bar, quick look, clipboard, launcher) + encrypted backup (AES-256-GCM, PBKDF2-SHA256 210k) and staged restore with automatic restart | ✅ |
 | 19 | Hotkey manager with rebinding | ⬜ |
 | 20 | Automation rules (triggers → actions, cooldown, run log) | ⬜ |
 | 21 | Text snippet expansion (Accessibility) | ⬜ |
@@ -90,7 +90,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 - ✅ Threshold alerts: CPU, memory pressure, low battery, low disk §4.4 (batch 5)
 - ✅ Habit tracker + weekly review §11.3–11.4
 - ⬜ Hotkey manager with rebinding §8.1
-- ⬜ App lock with Touch ID §13.1
+- ✅ App lock with Touch ID §13.1
 - ⬜ Not planned: private-API features (MediaRemote, fan/temperature via SMC, /etc/hosts blocking)
 
 ## NEXUS: not built yet
@@ -106,7 +106,7 @@ UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac*
 - ✅ Saved searches as sidebar items (S)
 - ✅ Quiet hours per app (S)
 - ✅ Private notes on a message (S)
-- ⬜ Touch ID lock (S)
+- ✅ Touch ID lock (S)
 
 ## Messages when apps are fully closed
 A closed app posts no notifications, so local capture can't see its messages. "Keep running" (batch 2) covers most cases.
@@ -160,13 +160,13 @@ The complete fix is per platform:
 - ✅ Export CSV / JSON / Markdown (by date range / client: ⬜)
 - ⬜ Local CLI / API (M)
 - ⬜ MCP server so AI assistants can query the inbox locally (M)
-- ⬜ Encrypted backup & restore (S)
+- ✅ Encrypted backup & restore (S)
 - ⬜ End-to-end encrypted sync between Macs (L)
 - ⬜ Per-client message counts for billing (M)
 
 ## Security & reliability
 - ⬜ SQLCipher-encrypted database, key in Keychain (M)
-- ⬜ Touch ID lock (S)
+- ✅ Touch ID lock (S)
 - ✅ Privacy mode: mask previews in menu bar / quick look / banners (widgets: ⬜)
 - ⬜ Capture self-healing after macOS updates (M)
 - ⬜ Sparkle auto-updates + notarized DMG (M)

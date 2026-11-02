@@ -17,6 +17,7 @@ struct SettingsView: View {
             RulesSettingsView().tabItem { Label("Rules", systemImage: "line.3.horizontal.decrease.circle") }
             NexusSettings().tabItem { Label("Nexus", systemImage: "square.grid.2x2") }
             PermissionsView().tabItem { Label("Privacy", systemImage: "lock.shield") }
+            SecuritySettings().tabItem { Label("Security", systemImage: "touchid") }
             shortcuts.tabItem { Label("Shortcuts", systemImage: "keyboard") }
         }
         .padding(20)

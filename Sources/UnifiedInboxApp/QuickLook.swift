@@ -70,7 +70,7 @@ final class QuickLookController {
     }
 
     func toggle() {
-        if let panel, panel.isVisible { close() } else { show() }
+        if let panel, panel.isVisible { close() } else { AppLock.shared.whenUnlocked { [weak self] in self?.show() } }
     }
 
     func close() {

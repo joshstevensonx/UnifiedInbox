@@ -230,6 +230,14 @@ reminder), then tick the circles for the last 7 days. 🔥 is the current streak
 **Weekly Review** sums up the week: tasks done, focus minutes per day, habits, screen time and messages received.
 Write a reflection and "Save as Note" to keep it in Notes. ⌥Space: type `done` to tick today's habits.
 
+### App lock and encrypted backup
+**Settings → Security**. "Require Touch ID" (or your Mac password on Macs without Touch ID) locks the window,
+menu-bar panel, quick look, launcher and clipboard history after you've been away for the chosen time, when the
+Mac sleeps or when the screen locks. Capture keeps running while locked.
+**Back Up Now…** writes one encrypted `.uibackup` file (messages, notes, tasks, habits, rules, settings files).
+**Restore…** asks for the password, then restarts the app to swap the data in; your previous data is kept in
+`~/Library/Application Support/UnifiedInbox.before-restore/`. There is no way to recover a forgotten password.
+
 ## 9. Troubleshooting
 
 | Symptom | Fix |

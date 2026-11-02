@@ -102,6 +102,13 @@ final class AppModel: ObservableObject {
         didSet {
             UserDefaults.standard.set(tilingHotKeys, forKey: Keys.tilingHotKeys)
             windows.setHotKeysEnabled(tilingHotKeys)
+        lockObserver = NotificationCenter.default.addObserver(forName: .appDidLock, object: nil, queue: .main) { [weak self] _ in
+            Task { @MainActor in
+                self?.quickLook?.close()
+                self?.launcherPanel.close()
+                self?.clipboard.closePanel()
+            }
+        }
         }
     }
 
@@ -127,6 +134,8 @@ final class AppModel: ObservableObject {
     let notes: NotesModel
     let files: FileToolsModel
     let habits: HabitsModel
+    let lock: AppLock
+    private var lockObserver: NSObjectProtocol?
     private var quickLook: QuickLookController?
 
     let store: InboxStore?
@@ -157,6 +166,8 @@ final class AppModel: ObservableObject {
     var visiblePlatforms: [Platform] { Platform.allCases.filter(enabledPlatforms.contains) }
 
     init() {
+        // A restore picked in Settings → Security is swapped in before any data file is opened.
+        BackupService.applyPendingRestore()
         let d = UserDefaults.standard
         ruleSet = JSONFileStore<RuleSet>(url: JSONFileStore<RuleSet>.defaultURL("rules")).load() ?? RuleSet()
         // Locals first: `self` can't be read until every stored property is set.
@@ -175,6 +186,7 @@ final class AppModel: ObservableObject {
         notes = NotesModel()
         files = FileToolsModel()
         habits = HabitsModel()
+        lock = AppLock.shared
         tilingHotKeys = d.object(forKey: Keys.tilingHotKeys) as? Bool ?? true
         launcherHotKey = d.object(forKey: Keys.launcherHotKey) as? Bool ?? true
         section = d.string(forKey: Keys.lastSection).flatMap(AppSection.init(rawValue:)) ?? .overview
