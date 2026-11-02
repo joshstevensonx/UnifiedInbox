@@ -50,7 +50,8 @@ public struct ThresholdEvaluator: Sendable {
             guard settings.enabled.contains(kind) else {
                 breachedSince[kind] = nil; active.remove(kind); continue
             }
-            guard let (breached, sustain, message) = check(kind, s, settings) else { continue } // metric unavailable: no change
+            guard let result = check(kind, s, settings) else { continue } // metric unavailable: no change
+            let (breached, sustain, message) = result
             if !breached {
                 breachedSince[kind] = nil
                 active.remove(kind)
@@ -88,4 +89,30 @@ public struct ThresholdEvaluator: Sendable {
                     "Only \(MetricFormat.bytes(Double(d.availableBytes))) free on the startup disk.")
         }
     }
+}
+
+/// Long-range history for slow metrics (battery, storage): keeps at most one point per
+/// `minInterval` and the newest `capacity` points. Codable so it survives restarts.
+public struct SampledHistory: Codable, Equatable, Sendable {
+    public private(set) var points: [MetricPoint] = []
+    public var capacity: Int
+    public var minInterval: TimeInterval
+
+    /// Default: one point every 5 minutes for 24 hours.
+    public init(capacity: Int = 288, minInterval: TimeInterval = 300) {
+        self.capacity = max(1, capacity); self.minInterval = minInterval
+    }
+
+    /// Returns true when the point was stored.
+    @discardableResult
+    public mutating func record(_ value: Double, at time: Date) -> Bool {
+        if let last = points.last {
+            guard time.timeIntervalSince(last.time) >= minInterval else { return false }
+        }
+        points.append(MetricPoint(time: time, value: value))
+        if points.count > capacity { points.removeFirst(points.count - capacity) }
+        return true
+    }
+
+    public mutating func removeAll() { points.removeAll() }
 }
