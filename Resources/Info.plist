@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key><string>UnifiedInbox</string>
+    <key>CFBundleDisplayName</key><string>Unified Inbox</string>
+    <key>CFBundleIdentifier</key><string>agency.nexoraweb.unifiedinbox</string>
+    <key>CFBundleExecutable</key><string>UnifiedInbox</string>
+    <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleShortVersionString</key><string>0.1.0</string>
+    <key>CFBundleVersion</key><string>1</string>
+    <key>LSMinimumSystemVersion</key><string>13.0</string>
+    <key>LSApplicationCategoryType</key><string>public.app-category.productivity</string>
+    <key>NSHighResolutionCapable</key><true/>
+    <key>NSPrincipalClass</key><string>NSApplication</string>
+    <key>CFBundleIconFile</key><string>AppIcon</string>
+    <key>CFBundleIconName</key><string>AppIcon</string>
+    <key>NSRemindersUsageDescription</key><string>Unified Inbox adds messages you choose to your Reminders list.</string>
+    <key>NSRemindersFullAccessUsageDescription</key><string>Unified Inbox adds messages you choose to your Reminders list.</string>
+    <key>NSAppleEventsUsageDescription</key><string>Unified Inbox controls Music and Spotify playback (play, pause, skip) and reads what's playing. Nothing leaves your Mac.</string>
+</dict>
+</plist>
