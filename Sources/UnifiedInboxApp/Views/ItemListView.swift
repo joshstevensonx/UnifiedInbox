@@ -1,4 +1,5 @@
 import InboxCore
+import NexusCore
 import SwiftUI
 
 struct ItemListView: View {
@@ -151,6 +152,8 @@ struct ItemRow: View {
     var hideBody = false
     var showsHoverActions = false
     @State private var hovering = false
+    /// Settings → Appearance → Message list density.
+    @AppStorage("density") private var density: UIDensity = .comfortable
 
     /// Full details shown on hover (native tooltip).
     static func tooltip(for item: InboxItem, group: InboxGroup? = nil) -> String {
@@ -180,7 +183,7 @@ struct ItemRow: View {
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
                     Text(item.title)
-                        .font(.system(size: 13, weight: unread ? .semibold : .regular))
+                        .font(.system(size: 13 + density.fontDelta, weight: unread ? .semibold : .regular))
                         .foregroundStyle(unread ? Theme.primary : Theme.secondary)
                         .lineLimit(1)
                     if let group, group.count > 1 {
@@ -230,7 +233,7 @@ struct ItemRow: View {
             }
         }
         .padding(.horizontal, 10)
-        .padding(.vertical, 9)
+        .padding(.vertical, 9 * density.spacing)
         .softFill(hovering && showsHoverActions ? Theme.fillHover : .clear, cornerRadius: Theme.radius - 2)
         .overlay(alignment: .leading) {
             // Thin unread rail instead of a dot.

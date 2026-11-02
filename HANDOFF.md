@@ -68,7 +68,7 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 | 21 | Text snippet expansion (event tap, Accessibility) | ✅ `NexusCore/Productivity/Snippets.swift` (+`SnippetTests`), `Nexus/SnippetEngine.swift` (NSEvent global monitor, not a CGEventTap), Snippets page |
 | 22 | Process manager (libproc, all processes) + log viewer | ✅ `NexusCore/Monitoring/Processes.swift` (+`ProcessTests`), `Nexus/ProcessManager.swift`, Processes page (Nexus section) |
 | 23 | `inboxctl` CLI + stdio MCP server over the local DB | ✅ `InboxCore/CLI/InboxCLI.swift`, `InboxCore/CLI/MCPServer.swift` (+`CLITests`), thin `Sources/inboxctl/main.swift`; build-app.sh copies it into Contents/MacOS. Builds and runs on Linux too |
-| 24 | Ambient clock, density/accent settings, hot-corner launcher, daily digest (FoundationModels if available) | ⬜ |
+| 24 | Ambient clock, density/accent settings, hot-corner launcher, daily digest (FoundationModels if available) | ✅ `NexusCore/Widgets/HotCorner.swift` (+`HotCornerTests`), `InboxCore/Rules/DailyDigest.swift` (+`DigestTests`), `Nexus/Ambient.swift`, Settings → Appearance |
 | 25 | Verify, update FEATURES/RUNNING, sync | ⬜ |
 
 ### Notes for later tasks
@@ -81,6 +81,8 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 - `AppSection` now has more than 9 cases; the Go menu only assigns ⌘1–⌘9 to the first nine.
 - App lock: `AppLock.shared` (MainActor). Gate new panels with `AppLock.shared.whenUnlocked { … }` and close them on `.appDidLock`. Floating widgets (incl. the Inbox widget) are not hidden while locked yet.
 - Restore is staged in `UnifiedInbox.restore/` and swapped in at the top of `AppModel.init` (`BackupService.applyPendingRestore`); the previous data goes to `UnifiedInbox.before-restore/`.
+- `Theme.accent` is now computed from UserDefaults `accentHex`; `ContentView` uses `.id(accentHex)` to redraw. Other windows (menu bar, panels) pick up a new accent the next time they render.
+- FoundationModels is behind `#if canImport(FoundationModels)` + `#available(macOS 26.0, *)` (`OnDeviceSummary`), so older SDKs still build.
 - Reusable `TextPrompt.ask(title:message:)` (WindowManager.swift) for one-field NSAlert prompts.
 - Add usage strings to `Resources/Info.plist` for any new permission (Reminders strings were added in batch 5).
 

@@ -281,6 +281,14 @@ inboxctl export --format csv --from 2026-10-01 --to 2026-10-31 > october.csv
 and paste it into the assistant's config file; it can then search your inbox locally. It's read-only unless you
 add `--allow-writes` to the args.
 
+### Appearance, hot corner, ambient clock, daily digest
+**Settings → Appearance**: accent colour, message-list density (compact / comfortable / spacious), a **hot corner**
+that opens the launcher (hold the pointer in the corner briefly), the **ambient clock** style, and the **daily
+digest** notification time. Tools → **Ambient Clock** (⌃⌘A) fills the screen with a clock plus unread count, focus
+timer, habits and battery; click or press esc to close. The **Digest** button in the inbox toolbar (or ⌥Space →
+"Daily Digest") shows the day's counts, priority messages and who's waiting for a reply. On macOS 26 with Apple
+Intelligence turned on, "Summarise with Apple Intelligence" adds a short summary written on this Mac.
+
 ## 9. Troubleshooting
 
 | Symptom | Fix |

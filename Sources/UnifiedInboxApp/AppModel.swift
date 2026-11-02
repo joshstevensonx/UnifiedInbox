@@ -145,6 +145,10 @@ final class AppModel: ObservableObject {
     let automation: AutomationManager
     let snippets: SnippetEngine
     let processes: ProcessManager
+    private(set) var hotCorner: HotCornerMonitor?
+    private let ambient = AmbientController()
+    private var digestTimer: Timer?
+    @Published var showDigest = false
     private var lockObserver: NSObjectProtocol?
     private var quickLook: QuickLookController?
 
@@ -239,6 +243,10 @@ final class AppModel: ObservableObject {
         widgets.attach(model: self)
         registerHotkeys()
         automation.attach(model: self)
+        hotCorner = HotCornerMonitor { [weak self] in self?.showLauncher() }
+        digestTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.checkDigestSchedule() }
+        }
     }
 
     // MARK: Capture
@@ -552,6 +560,8 @@ final class AppModel: ObservableObject {
     func showQuickLook() { quickLook?.toggle() }
 
     func showLauncher() { launcherPanel.toggle() }
+
+    func toggleAmbient() { ambient.toggle(model: self) }
 
     /// Jump to an inbox view from anywhere (overview cards, widgets, menu bar).
     func selectInbox(_ filter: InboxFilter) {

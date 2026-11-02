@@ -113,6 +113,12 @@ extension AppModel {
         c += notesPaletteCommands()
         c += habitPaletteCommands()
         c += automationPaletteCommands()
+        c.append(PaletteCommand(id: "ambient.show", title: "Ambient Clock", subtitle: "⌃⌘A", symbol: "clock",
+                                keywords: ["clock", "screensaver", "time", "ambient"]) { [weak self] in self?.toggleAmbient() })
+        c.append(PaletteCommand(id: "digest.show", title: "Daily Digest", symbol: "text.badge.star",
+                                keywords: ["summary", "today", "digest", "messages"]) { [weak self] in
+            self?.showDigest = true; self?.openInbox()
+        })
         c.append(PaletteCommand(id: "go.logs", title: "Show System Log", symbol: "doc.text.magnifyingglass",
                                 keywords: ["log", "console", "errors", "debug"]) { [weak self] in
             self?.section = .processes; self?.openInbox()
