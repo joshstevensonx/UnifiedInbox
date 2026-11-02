@@ -18,6 +18,35 @@ final class SystemMonitor: ObservableObject {
     @Published private(set) var upHistory: [MetricPoint] = []
     @Published var isPaused = false { didSet { reschedule() } }
 
+    /// Long-range battery level (0...1) and free-storage (bytes) history: one point per 5 min, 24 h, persisted.
+    @Published private(set) var batteryLong = SampledHistory()
+    @Published private(set) var storageLong = SampledHistory()
+
+    /// Opt-in threshold alerts (CPU, memory pressure, low battery, low disk). Persisted in UserDefaults.
+    @Published var thresholds: ThresholdSettings {
+        didSet {
+            if let data = try? JSONEncoder().encode(thresholds) { UserDefaults.standard.set(data, forKey: Self.thresholdsKey) }
+        }
+    }
+    /// Most recent alerts, newest first (shown in the monitor).
+    @Published private(set) var recentAlerts: [FiredAlert] = []
+
+    struct FiredAlert: Identifiable {
+        let id = UUID()
+        let time: Date
+        let kind: ThresholdKind
+        let message: String
+    }
+
+    nonisolated static let thresholdsKey = "nexusThresholds"
+    private var evaluator = ThresholdEvaluator()
+    private let historyStore = JSONFileStore<LongHistory>(url: JSONFileStore<LongHistory>.defaultURL("metric-history"))
+
+    struct LongHistory: Codable {
+        var battery: SampledHistory
+        var storage: SampledHistory
+    }
+
     let identity = SystemSampler.identity()
 
     static let historyCapacity = 150 // 5 minutes at 2 s
@@ -36,6 +65,14 @@ final class SystemMonitor: ObservableObject {
     var interval: TimeInterval { subscribers > 0 ? 2 : 15 }
 
     init() {
+        // Locals first: `self` can't be read until every stored property is set.
+        let saved = UserDefaults.standard.data(forKey: Self.thresholdsKey)
+        thresholds = saved.flatMap { try? JSONDecoder().decode(ThresholdSettings.self, from: $0) } ?? ThresholdSettings()
+        let history = JSONFileStore<LongHistory>(url: JSONFileStore<LongHistory>.defaultURL("metric-history")).load()
+        if let history {
+            batteryLong = history.battery
+            storageLong = history.storage
+        }
         let ws = NSWorkspace.shared.notificationCenter
         observers.append(ws.addObserver(forName: NSWorkspace.willSleepNotification, object: nil, queue: .main) { [weak self] _ in
             Task { @MainActor in self?.sleeping = true; self?.reschedule() }
@@ -134,5 +171,28 @@ final class SystemMonitor: ObservableObject {
             downRing.append(MetricPoint(time: t, value: n.downBytesPerSecond)); downHistory = downRing.elements
             upRing.append(MetricPoint(time: t, value: n.upBytesPerSecond)); upHistory = upRing.elements
         }
+
+        // Long-range history only from real samples (not carried-forward values).
+        var historyChanged = false
+        if case .reading(let b)? = new.battery { historyChanged = batteryLong.record(b.level, at: t) || historyChanged }
+        if let st = new.storage { historyChanged = storageLong.record(Double(st.availableBytes), at: t) || historyChanged }
+        if historyChanged { try? historyStore.save(LongHistory(battery: batteryLong, storage: storageLong)) }
+
+        checkThresholds(merged)
+    }
+
+    private func checkThresholds(_ snap: SystemSnapshot) {
+        guard !thresholds.enabled.isEmpty else { return }
+        for alert in evaluator.evaluate(snap, settings: thresholds, now: snap.timestamp) {
+            recentAlerts.insert(FiredAlert(time: snap.timestamp, kind: alert.kind, message: alert.message), at: 0)
+            if recentAlerts.count > 20 { recentAlerts.removeLast(recentAlerts.count - 20) }
+            UNUserNotificationCenterSafe.post(id: "threshold-\(alert.kind.rawValue)", title: alert.kind.title, body: alert.message)
+        }
+    }
+
+    func clearLongHistory() {
+        batteryLong.removeAll()
+        storageLong.removeAll()
+        try? historyStore.save(LongHistory(battery: batteryLong, storage: storageLong))
     }
 }

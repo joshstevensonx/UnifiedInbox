@@ -57,7 +57,7 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 |---|---|---|
 | 11 | Inbox rules engine, labels, quiet hours, auto-archive | ✅ core + tests + Settings → Rules tab + sidebar Labels |
 | 12 | Saved searches, private notes, "Remind me", Add to Tasks / Apple Reminders, export by date range | ✅ |
-| 13 | Threshold alerts + battery/storage history | 🚧 **core done** (`NexusCore/Monitoring/Thresholds.swift`, untested, not wired) |
+| 13 | Threshold alerts + battery/storage history | ✅ tests (`ThresholdTests`), wired in `SystemMonitor`, charts in Monitor Battery/Storage tabs, Settings → Nexus → System alerts |
 | 14 | Window tiling + workspaces (Accessibility) | ⬜ |
 | 15 | Notes: Markdown, [[backlinks]], daily notes | ⬜ |
 | 16 | File tools: large files, Downloads cleanup, duplicates | ⬜ |
@@ -70,12 +70,6 @@ Excluded (need an account or payment): Microsoft Graph sign-in, Slack/Discord/Te
 | 23 | `inboxctl` CLI + stdio MCP server over the local DB | ⬜ |
 | 24 | Ambient clock, density/accent settings, hot-corner launcher, daily digest (FoundationModels if available) | ⬜ |
 | 25 | Verify, update FEATURES/RUNNING, sync | ⬜ |
-
-### Next steps for task 13
-1. Add tests for `ThresholdEvaluator` (sustain, one alert per continuous breach, cooldown, unavailable metric = no change).
-2. In `Nexus/SystemMonitor.swift`: hold `var thresholds = ThresholdSettings()` (persist as JSON in UserDefaults) and `ThresholdEvaluator`. In `publish(_:)` run `evaluate` and post via `UNUserNotificationCenterSafe.post`.
-3. Keep battery-level and storage-free histories in `RingBuffer`s (e.g. capacity 288). Chart them in the `MonitorView` Battery/Storage tabs, which currently show placeholder text.
-4. Add a "System alerts" section to `NexusSettings` (Views/SettingsView.swift) with toggles and limits.
 
 ### Notes for later tasks
 - When adding Automation (task 20), call `automation?.newMessages(items)` at the top of `AppModel.handleNew` (removed at handoff because the type doesn't exist yet).

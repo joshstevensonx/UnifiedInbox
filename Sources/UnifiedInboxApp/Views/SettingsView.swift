@@ -206,6 +206,7 @@ struct NexusSettings: View {
                 Text("Samples CPU, memory and network every 2 s while a dashboard, widget or the menu is visible, every 15 s otherwise. Battery about every 30 s, storage about every 60 s. Everything stays on this Mac.")
                     .font(.caption).foregroundStyle(.secondary)
             }
+            SystemAlertsSection()
             Section("Widgets") {
                 Button(model.widgets.anyVisible ? "Hide All Widgets" : "Show All Widgets") {
                     model.widgets.showAll(!model.widgets.anyVisible)
@@ -216,5 +217,44 @@ struct NexusSettings: View {
             }
         }
         .formStyle(.grouped)
+    }
+}
+
+/// Opt-in threshold alerts (task 13). Debounced: a condition must last, fires once, then waits for the cooldown.
+struct SystemAlertsSection: View {
+    @EnvironmentObject private var monitor: SystemMonitor
+
+    private func toggle(_ kind: ThresholdKind) -> Binding<Bool> {
+        Binding(get: { monitor.thresholds.enabled.contains(kind) },
+                set: { on in if on { monitor.thresholds.enabled.insert(kind) } else { monitor.thresholds.enabled.remove(kind) } })
+    }
+
+    var body: some View {
+        Section {
+            Toggle("High CPU", isOn: toggle(.cpu))
+            if monitor.thresholds.enabled.contains(.cpu) {
+                Stepper("Above \(Int(monitor.thresholds.cpuLimit * 100))%", value: $monitor.thresholds.cpuLimit, in: 0.5...0.99, step: 0.05)
+                Stepper("For \(Int(monitor.thresholds.cpuSustainSeconds)) s", value: $monitor.thresholds.cpuSustainSeconds, in: 10...600, step: 10)
+            }
+            Toggle("Memory pressure", isOn: toggle(.memory))
+            if monitor.thresholds.enabled.contains(.memory) {
+                Toggle("Only when critical", isOn: $monitor.thresholds.memoryCriticalOnly)
+            }
+            Toggle("Low battery", isOn: toggle(.battery))
+            if monitor.thresholds.enabled.contains(.battery) {
+                Stepper("At \(Int(monitor.thresholds.batteryLimit * 100))% or less (on battery)", value: $monitor.thresholds.batteryLimit, in: 0.05...0.5, step: 0.05)
+            }
+            Toggle("Low disk space", isOn: toggle(.disk))
+            if monitor.thresholds.enabled.contains(.disk) {
+                Stepper("Under \(MetricFormat.bytes(Double(monitor.thresholds.diskFreeLimitBytes))) free",
+                        value: $monitor.thresholds.diskFreeLimitBytes, in: 1_000_000_000...200_000_000_000, step: 5_000_000_000)
+            }
+            Stepper("Repeat at most every \(Int(monitor.thresholds.cooldownMinutes)) min", value: $monitor.thresholds.cooldownMinutes, in: 5...240, step: 5)
+        } header: {
+            Text("System alerts")
+        } footer: {
+            Text("Posts a notification when a limit is crossed. Each alert fires once per breach and repeats only after the condition clears and the cooldown passes.")
+                .font(.caption).foregroundStyle(.secondary)
+        }
     }
 }

@@ -27,8 +27,8 @@ Status: ✅ built (core unit-tested; UI not yet compiled on a Mac) · 🚧 in pr
 - ⬜ Send to task: Apple Reminders, Things, Todoist, Asana, Notion (M)
 - ⬜ Follow-up reminders: "remind me if no reply in 2 days" (M)
 - ⬜ Command palette ⌘K with natural commands (M)
-- ⬜ Saved searches as sidebar items (S)
-- ⬜ Private notes on a message (S)
+- ✅ Saved searches as sidebar items (S)
+- ✅ Private notes on a message (S)
 
 ## Batch 3: NEXUS merge (see docs/NEXUS_Product_Documentation.md)
 | Feature | Spec | Status |
@@ -61,13 +61,33 @@ Status: ✅ built (core unit-tested; UI not yet compiled on a Mac) · 🚧 in pr
 | Permissions dashboard + "Your data" (Settings → Privacy) | §8.2, §13.2 | ✅ |
 | Tools menu shortcuts: ⌥⇧⌘4 region, ⌥⇧⌘2 OCR, ⇧⌘F focus | — | ✅ |
 
+## Batch 5: everything that needs no account or payment
+UI items marked ✅ are syntax-checked on Linux but **not yet compiled on a Mac** (run `./scripts/build-app.sh`).
+
+| # | Feature | Status |
+|---|---|---|
+| 11 | Inbox rules engine (sender / keyword / app → archive, pin, label, mute), labels with colours, quiet hours, auto-archive read messages | ✅ |
+| 12 | Saved searches in the sidebar, private notes, "Remind me", Add to Tasks / Apple Reminders, export by date range | ✅ |
+| 13 | Threshold alerts (CPU sustained, memory pressure, low battery, low disk; debounced + cooldown) and 24 h battery / storage history charts | ✅ |
+| 14 | Window tiling + workspaces (Accessibility) | ⬜ |
+| 15 | Notes: Markdown, [[backlinks]], daily notes | ⬜ |
+| 16 | File tools: large files, Downloads cleanup, duplicates | ⬜ |
+| 17 | Habits + weekly review | ⬜ |
+| 18 | Touch ID app lock + AES-GCM encrypted backup / restore | ⬜ |
+| 19 | Hotkey manager with rebinding | ⬜ |
+| 20 | Automation rules (triggers → actions, cooldown, run log) | ⬜ |
+| 21 | Text snippet expansion (Accessibility) | ⬜ |
+| 22 | Process manager (all processes) + log viewer | ⬜ |
+| 23 | `inboxctl` CLI + stdio MCP server over the local DB | ⬜ |
+| 24 | Ambient clock, density / accent settings, hot-corner launcher, daily digest | ⬜ |
+
 ## From the feature spec: good next candidates
 - ⬜ Window snapping / tiling layouts (needs Accessibility permission) §6.2
 - ⬜ Workspaces: save/restore running apps + window positions §2.2
 - ⬜ Text expansion / snippets (needs Accessibility) §1.4
 - ⬜ Notes with Markdown, backlinks, daily notes §10
 - ⬜ File tools: large-file finder, Downloads cleanup, duplicates §3.3
-- ⬜ Threshold alerts: CPU, memory pressure, low battery, low disk §4.4
+- ✅ Threshold alerts: CPU, memory pressure, low battery, low disk §4.4 (batch 5)
 - ⬜ Habit tracker + weekly review §11.3–11.4
 - ⬜ Hotkey manager with rebinding §8.1
 - ⬜ App lock with Touch ID §13.1
@@ -77,15 +97,15 @@ Status: ✅ built (core unit-tested; UI not yet compiled on a Mac) · 🚧 in pr
 - ⬜ Process manager (P1)
 - ⬜ Workspaces: save / switch layouts (P1)
 - ⬜ Ambient clocks and scenes
-- ⬜ Threshold alerts: CPU, memory pressure, low battery, low disk (opt-in, debounced)
+- ✅ Threshold alerts: CPU, memory pressure, low battery, low disk (opt-in, debounced)
 - ⬜ Automation rules
 - ⬜ Launcher edge / hot-corner reveal; configurable hotkeys
-- ⬜ Battery and storage history charts
+- ✅ Battery and storage history charts (24 h)
 
 ## Up next (batch 4)
-- ⬜ Saved searches as sidebar items (S)
-- ⬜ Quiet hours per app (S)
-- ⬜ Private notes on a message (S)
+- ✅ Saved searches as sidebar items (S)
+- ✅ Quiet hours per app (S)
+- ✅ Private notes on a message (S)
 - ⬜ Touch ID lock (S)
 
 ## Messages when apps are fully closed
@@ -96,9 +116,9 @@ The complete fix is per platform:
 - Slack / Discord / Telegram: their own APIs (each L).
 
 ## Smart filtering & rules
-- ⬜ Full rules engine: sender / keyword / app → archive, pin, label, alert (M)
-- ⬜ Labels / colours per client or project (S)
-- ⬜ Auto-cleanup: archive group-chat noise after X hours (S)
+- ✅ Full rules engine: sender / keyword / app → archive, pin, label, alert (M)
+- ✅ Labels / colours per client or project (S)
+- ✅ Auto-cleanup: archive group-chat noise after X hours (S)
 - ⬜ Noise detection: learn threads you always archive unread (M)
 
 ## On-device AI (private)
@@ -111,7 +131,7 @@ The complete fix is per platform:
 
 ## Focus & wellbeing
 - ⬜ Focus sessions with summary afterwards (M)
-- ⬜ Quiet hours per app (S)
+- ✅ Quiet hours per app (S)
 - ⬜ Batched delivery every 30/60 min (M)
 - ⬜ Work / personal split views (S)
 - ⬜ Volume & response-time analytics (M)

@@ -1,3 +1,4 @@
+import AppKit
 import Charts
 import NexusCore
 import SwiftUI
@@ -27,7 +28,7 @@ struct MonitorView: View {
                 Toggle(isOn: $monitor.isPaused) { Label("Pause", systemImage: "pause.fill") }
                     .toggleStyle(.button)
                     .help("Pause all sampling (widgets keep their last values, marked stale)")
-                Text("Last 5 min · \(timeText(s.timestamp))")
+                Text("\(tab == .battery || tab == .storage ? "Last 24 h" : "Last 5 min") · \(timeText(s.timestamp))")
                     .font(.system(size: 11)).foregroundStyle(Theme.tertiary)
             }
 
@@ -49,11 +50,19 @@ struct MonitorView: View {
                                      ("Upload", monitor.upHistory, .orange.opacity(0.85))], unit: .rate)
             case .battery:
                 stats([("Charge", s.batteryText), ("State", s.batteryDetail)])
-                placeholder("Battery history is sampled every 30 s and isn't charted yet.")
+                if case .noBattery? = s.battery {
+                    placeholder("This Mac has no battery.")
+                } else {
+                    MetricChart(series: [("Charge", monitor.batteryLong.points, .green.opacity(0.8))], unit: .percent,
+                                timeStride: .hour, emptyText: "Collecting data… one point every 5 minutes, kept for 24 hours.")
+                }
+                alertsCard
             case .storage:
                 stats([("Free", s.storageText), ("Total", s.storage.map { MetricFormat.bytes(Double($0.totalBytes)) }),
                        ("Used", s.storage.map { MetricFormat.percent($0.usedFraction) })])
-                placeholder("Startup disk only. Other volumes will be added later.")
+                MetricChart(series: [("Free", monitor.storageLong.points, Theme.accent)], unit: .bytes,
+                            timeStride: .hour, emptyText: "Collecting data… one point every 5 minutes, kept for 24 hours.")
+                alertsCard
             }
             Spacer(minLength: 0)
         }
@@ -72,6 +81,34 @@ struct MonitorView: View {
         .glassCard()
     }
 
+    /// Threshold alert status and the latest alerts.
+    private var alertsCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                SectionLabel(text: "System alerts")
+                Spacer()
+                Text(monitor.thresholds.enabled.isEmpty ? "Off" :
+                        monitor.thresholds.enabled.map(\.title).sorted().joined(separator: ", "))
+                    .font(.system(size: 11)).foregroundStyle(Theme.secondary)
+                SettingsLink14 { Text("Change…").font(.system(size: 11)) }
+            }
+            if monitor.recentAlerts.isEmpty {
+                Text("No alerts since launch.").font(.system(size: 12)).foregroundStyle(Theme.tertiary)
+            } else {
+                ForEach(monitor.recentAlerts.prefix(5)) { a in
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        Text(a.time.formatted(date: .omitted, time: .shortened))
+                            .font(.system(size: 11).monospacedDigit()).foregroundStyle(Theme.tertiary)
+                        Text(a.kind.title).font(.system(size: 12, weight: .medium)).foregroundStyle(Theme.primary)
+                        Text(a.message).font(.system(size: 12)).foregroundStyle(Theme.secondary).lineLimit(1)
+                    }
+                }
+            }
+        }
+        .padding(16)
+        .glassCard()
+    }
+
     private func placeholder(_ text: String) -> some View {
         Text(text).font(.system(size: 12)).foregroundStyle(Theme.tertiary)
             .frame(maxWidth: .infinity, minHeight: 120).glassCard()
@@ -84,14 +121,24 @@ struct MonitorView: View {
 
 /// Labelled line chart with time axis and units; shows an explicit empty state.
 struct MetricChart: View {
-    enum Unit { case percent, rate }
+    enum Unit { case percent, rate, bytes }
     let series: [(name: String, points: [MetricPoint], color: Color)]
     let unit: Unit
+    var timeStride: Calendar.Component = .minute
+    var emptyText = "Collecting data…"
+
+    private func label(_ v: Double) -> String {
+        switch unit {
+        case .percent: return MetricFormat.percent(v)
+        case .rate: return MetricFormat.rate(v)
+        case .bytes: return MetricFormat.bytes(v)
+        }
+    }
 
     var body: some View {
         Group {
             if series.allSatisfy({ $0.points.count < 2 }) {
-                Text("Collecting data…").font(.system(size: 12)).foregroundStyle(Theme.tertiary)
+                Text(emptyText).font(.system(size: 12)).foregroundStyle(Theme.tertiary)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 Chart {
@@ -110,14 +157,14 @@ struct MetricChart: View {
                         AxisGridLine().foregroundStyle(Theme.hairline)
                         AxisValueLabel {
                             if let v = value.as(Double.self) {
-                                Text(unit == .percent ? MetricFormat.percent(v) : MetricFormat.rate(v))
+                                Text(label(v))
                                     .font(.system(size: 10)).foregroundStyle(Theme.tertiary)
                             }
                         }
                     }
                 }
                 .chartXAxis {
-                    AxisMarks(values: .stride(by: .minute)) { _ in
+                    AxisMarks(values: .stride(by: timeStride)) { _ in
                         AxisGridLine().foregroundStyle(Theme.hairline)
                         AxisValueLabel(format: .dateTime.hour().minute()).foregroundStyle(Theme.tertiary)
                     }
@@ -128,5 +175,20 @@ struct MetricChart: View {
         .padding(18)
         .frame(minHeight: 260)
         .glassCard()
+    }
+}
+
+/// Opens the Settings window (SettingsLink is macOS 14+, so fall back to the responder chain on 13).
+struct SettingsLink14<Label: View>: View {
+    @ViewBuilder var label: () -> Label
+
+    var body: some View {
+        if #available(macOS 14.0, *) {
+            SettingsLink(label: label).buttonStyle(.link)
+        } else {
+            Button(action: {
+                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+            }, label: label).buttonStyle(.link)
+        }
     }
 }

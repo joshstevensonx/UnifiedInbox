@@ -190,7 +190,7 @@ public struct RingBuffer<Element>: Sendable where Element: Sendable {
 }
 
 /// A timestamped value for charts.
-public struct MetricPoint: Identifiable, Equatable, Sendable {
+public struct MetricPoint: Identifiable, Equatable, Codable, Sendable {
     public var id: Date { time }
     public var time: Date
     public var value: Double
